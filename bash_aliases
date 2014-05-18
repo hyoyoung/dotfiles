@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# common part
+# add useful aliases
+alias h='history 100'
+alias g='grep'
+
+# system dependent part
 init_linux_conf() {
     # add sbin for default ubuntu setting
     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
@@ -29,8 +35,3 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     echo "Cygwin"
 fi
-
-# add useful aliases
-alias h='history 100'
-alias g='grep'
-
