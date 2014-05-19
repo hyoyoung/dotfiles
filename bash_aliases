@@ -1,19 +1,5 @@
 #!/bin/bash
 
-# common part
-alias ls='ls -Fh'
-alias ll='ls -l'
-alias la='ls -a'
-alias le='ls -al'
-alias lr='ls -lR'
-
-alias df='df -h'
-alias du='du -sh'
-
-# add useful aliases
-alias h='history 100'
-alias g='grep'
-
 # system dependent part
 init_linux_conf() {
     # add sbin for default ubuntu setting
@@ -58,6 +44,9 @@ init_darwin_conf() {
     
     # java dir path
     export JAVA_HOME=$(/usr/libexec/java_home)
+
+    alias ls='ls -Fh'
+    alias ll='ls -l'
 }
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -67,3 +56,11 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     echo "Cygwin"
 fi
+
+# common part
+alias df='df -h'
+alias du='du -sh'
+
+# add useful aliases
+alias h='history 100'
+alias g='grep'
