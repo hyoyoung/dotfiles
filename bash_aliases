@@ -38,8 +38,26 @@ init_linux_conf() {
 }
 
 init_darwin_conf() {
-    # add mac conf
-    :
+    # path
+    export PATH=/usr/local/bin:$PATH
+    
+    # cmd prompt
+    export PS1="\u@\h:\w\$ "
+    
+    # Tell ls to be colourful
+    export CLICOLOR=1
+    export LSCOLORS="ExGxBxDxCxEgEdxbxgacxd"
+    
+    # Tell grep to highlight matches
+    export GREP_OPTIONS='--color=auto'
+    
+    # add bash completion
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+      . $(brew --prefix)/etc/bash_completion
+    fi
+    
+    # java dir path
+    export JAVA_HOME=$(/usr/libexec/java_home)
 }
 
 if [ "$(uname)" == "Darwin" ]; then
