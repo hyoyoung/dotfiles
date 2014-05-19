@@ -1,6 +1,15 @@
 #!/bin/bash
 
 # common part
+alias ls='ls -Fh'
+alias ll='ls -l'
+alias la='ls -a'
+alias le='ls -al'
+alias lr='ls -lR'
+
+alias df='df -h'
+alias du='du -sh'
+
 # add useful aliases
 alias h='history 100'
 alias g='grep'
@@ -28,8 +37,13 @@ init_linux_conf() {
     export MAKEFLAGS=-j5
 }
 
+init_darwin_conf() {
+    # add mac conf
+    :
+}
+
 if [ "$(uname)" == "Darwin" ]; then
-    echo "Darwin"
+    init_darwin_conf
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     init_linux_conf
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then

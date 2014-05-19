@@ -147,7 +147,8 @@
 (display-time)
 (defalias 'yes-or-no-p 'y-or-n-p)       ; use y/n instead of yes/no
 (show-paren-mode t) ; turn on paren match highlighting
-(setq show-paren-style 'expression) ; highlight entire bracket expression
+;(setq show-paren-style 'expression) ; highlight entire bracket expression
+(setq show-paren-style 'mixed) 
 
 ;; show file size
 (size-indication-mode)
@@ -348,8 +349,8 @@
 ;;;##############################################################
 ;(add-to-list 'load-path "~/.emacs.d/site-lisp/highlight-symbol/")
 (require 'highlight-symbol)
-;(global-set-key (kbd "<M-up>") 'highlight-symbol-remove-all)
-;(global-set-key (kbd "<M-down>") 'highlight-symbol-at-point)
+(global-set-key (kbd "<M-up>") 'highlight-symbol-remove-all)
+(global-set-key (kbd "<M-down>") 'highlight-symbol-at-point)
 ;(global-set-key (kbd "<M-left>") 'highlight-symbol-next)
 ;(global-set-key (kbd "<M-right>") 'highlight-symbol-prev)
 
@@ -435,7 +436,7 @@ whitespaces of the next line. Otherwise it would kill current word."
           (delete-indentation t)
         (kill-word arg)))
       ))
-(global-set-key (kbd "M-\\") 'kill-word-vi-style)
+(global-set-key (kbd "C-d") 'kill-word-vi-style)
 
 ;;---
 ;; http://www.emacswiki.org/emacs/ParenthesisMatching
