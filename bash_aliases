@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# system dependent part
+#########################
+# system dependent part #
+#########################
 init_linux_conf() {
     # add sbin for default ubuntu setting
     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
@@ -57,7 +59,9 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     echo "Cygwin"
 fi
 
-# common part
+###############
+# common part #
+################
 alias df='df -h'
 alias du='du -sh'
 
