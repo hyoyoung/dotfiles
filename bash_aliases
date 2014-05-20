@@ -68,3 +68,4 @@ alias du='du -sh'
 # add useful aliases
 alias h='history 100'
 alias g='grep'
+alias r='reset'
