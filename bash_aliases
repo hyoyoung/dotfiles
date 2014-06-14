@@ -63,7 +63,7 @@ fi
 # common part #
 ################
 alias df='df -h'
-alias du='du -sh'
+alias du='du -h'
 
 # add useful aliases
 alias h='history 100'
