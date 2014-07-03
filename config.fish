@@ -71,7 +71,7 @@ alias df='df -h'
 alias du='du -h'
 
 # add useful aliases
-alias h='history | tail -n 100'
+alias h='history | head -n 25'
 alias g='grep'
 alias r='reset'
 alias tmnew='tmux new-session -s $USER'
