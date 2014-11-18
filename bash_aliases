@@ -8,7 +8,8 @@ init_linux_conf() {
     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 
     # term set
-    if [ "$COLORTERM" == "gnome-terminal" ] || [ "$COLORTERM" == "xfce4-terminal" ]
+    if [ "$COLORTERM" == "gnome-terminal" ] || [ "$COLORTERM" == "xfce4-terminal" ] ||
+         [ "$TERM" == "xterm" ]
     then
         TERM=xterm-256color
     elif [ "$COLORTERM" == "rxvt-xpm" ]
