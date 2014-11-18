@@ -164,6 +164,14 @@
 (require 'ido)
 (ido-mode t)
 
+;;; Smex
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
 ;; font-lock-mode
 (global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)
