@@ -1,0 +1,15 @@
+TERM=xterm-256color
+
+###############
+# common part #
+################
+alias df='df -h'
+alias du='du -h'
+
+# add useful aliases
+alias h='history 100'
+alias g='grep'
+alias r='reset'
+alias tmnew='tmux new-session -s $USER'
+alias tmat='tmux attach || tnew'
+alias tmls='tmux list-sessions'
