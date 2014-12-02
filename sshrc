@@ -13,3 +13,7 @@ alias r='reset'
 alias tmnew='tmux new-session -s $USER'
 alias tmat='tmux attach || tnew'
 alias tmls='tmux list-sessions'
+
+set -o emacs
+function cdls() { cd "$@" && ls; }
+alias cd='cdls'
