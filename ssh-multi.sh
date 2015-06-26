@@ -15,7 +15,6 @@ starttmux() {
  
     local hosts=( $HOSTS )
  
- 
     tmux new-window "ssh ${hosts[0]}"
     unset hosts[0];
     for i in "${hosts[@]}"; do
@@ -27,6 +26,8 @@ starttmux() {
  
 }
  
-HOSTS=${HOSTS:=$*}
+#HOSTS=${HOSTS:=$*}
+#HOSTS="scv082.kr.iwilab.com scv084.kr.iwilab.com scv088.kr.iwilab.com scv112.kr.iwilab.com scv113.kr.iwilab.com"
+HOSTS="$*"
 
-starttmux
+starttmux 
