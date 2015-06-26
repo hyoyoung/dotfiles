@@ -7,10 +7,10 @@ addhosts() {
     local hosts=( $HOSTS )
  
     for i in "${hosts[@]}"; do
-        ssh-keyscan -H $i >> ~/.ssh/known_hosts
+        ssh-keyscan -t rsa $i >> ~/.ssh/known_hosts
     done
 }
  
-HOSTS=$1
+HOSTS="$*"
 
 addhosts
