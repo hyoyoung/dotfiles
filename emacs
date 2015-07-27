@@ -94,7 +94,7 @@
       (setq my-frame-y 20)
       (setq my-frame-height 40)
       (setq my-frame-width 135)
-      ;(setq my-font-height 110)
+      (setq my-font-height 95)
 
       (my-linux-conf)
     )
@@ -106,9 +106,12 @@
 ;;;##############################################################
   
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+(add-to-list 'package-archives
+             '("gun" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
   
 ;;;##############################################################
@@ -215,8 +218,10 @@
     (setq show-trailing-whitespace t))
 )
 
-(add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'jedi:ac-setup)
+(setq jedi:environment-virtualenv
+      (list "pyvenv-3.5" "--system-site-packages"))
+;(add-hook 'python-mode-hook 'auto-complete-mode)
+;(add-hook 'python-mode-hook 'jedi:ac-setup)
 ; jedi:complete-on-dot only works in jedi-setup
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
@@ -258,7 +263,6 @@
 ;;; rainbow-delimiter
 ;;;##############################################################
 (require 'rainbow-delimiters)
-(global-rainbow-delimiters-mode)
 
 ;;;##############################################################
 ;; sr-speedbar
@@ -293,9 +297,10 @@
 (setq speedbar-use-images nil)
 (setq sr-speedbar-skip-other-window-p t)
 ;(setq sr-speedbar-auto-refresh nil)
-(setq sr-speedbar-max-width 30)
+(setq sr-speedbar-max-width 15)
+(setq sr-speedbar-width 15)
 (setq sr-speedbar-right-side nil)
-(setq sr-speedbar-width-console 20)
+(setq sr-speedbar-width-console 10)
 
 (when window-system
   (defadvice sr-speedbar-open (after sr-speedbar-open-resize-frame activate)
