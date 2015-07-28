@@ -1,3 +1,5 @@
+# fish config
+
 function prompt_pwd --description 'Print the current working directory, NOT shortened to fit the prompt'
         if test "$PWD" != "$HOME"
                 printf "%s" (echo $PWD|sed -e 's|/private||' -e "s|^$HOME|~|")
@@ -83,27 +85,6 @@ function fish_prompt --description 'Write out the prompt'
         end
 end
 
-    # path
-    set -x PATH /usr/local/bin $PATH
-
-    # editor
-    set -x EDITOR vim
-
-    # cmd prompt
-    #export PS1="\u@\h:\w\$ "
-
-    # Tell ls to be colourful
-    set -x CLICOLOR 1
-    set -x LSCOLORS "ExGxBxDxCxEgEdxbxgacxd"
-
-    # Tell grep to highlight matches
-    set -x GREP_OPTIONS '--color=auto'
-
-    # java dir path
-    set -x JAVA_HOME  (/usr/libexec/java_home)
-
-    alias ls='ls -Fh'
-
 ###############
 # common part #
 ################
@@ -117,3 +98,10 @@ alias r='reset'
 alias tmnew='tmux new-session -s $USER'
 alias tmat='tmux attach; or tnew'
 alias tmls='tmux list-sessions'
+
+# OS-specific customizations
+if [ (uname) = 'Darwin' ]
+    source ~/.config/mac.fish
+else if [ (uname) = 'Linux' ]
+    source ~/.config/linux.fish
+end
