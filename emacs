@@ -107,7 +107,7 @@
   
 (require 'package)
 (add-to-list 'package-archives
-             '("gun" . "http://elpa.gnu.org/packages/"))
+             '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives
@@ -183,7 +183,7 @@
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;; Display line number on the left
-;(global-linum-mode 1)
+;(global-linum-mode t)
 ;;(set-face-attribute 'linum nil :background "#222")
 ;(setq linum-format "%4d\u2502")
 
@@ -215,17 +215,13 @@
     (setq indent-tabs-mode nil)
     (setq default-tab-width 4)
     (setq python-indent-offset 4) 
-    (setq show-trailing-whitespace t))
-)
+    (setq show-trailing-whitespace t)))
 
 (setq jedi:environment-virtualenv
       (list "pyvenv-3.5" "--system-site-packages"))
-;(add-hook 'python-mode-hook 'auto-complete-mode)
-;(add-hook 'python-mode-hook 'jedi:ac-setup)
-; jedi:complete-on-dot only works in jedi-setup
 (add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
 (setq jedi:setup-keys t)
+(setq jedi:complete-on-dot t)
 
 ;; ipython
 (setq
@@ -263,6 +259,7 @@
 ;;; rainbow-delimiter
 ;;;##############################################################
 (require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;;;##############################################################
 ;; sr-speedbar
@@ -281,22 +278,11 @@
 
 (require 'sr-speedbar)
 ;(global-set-key (kbd "s-s") 'sr-speedbar-toggle)
-;;(setq sr-speedbar-width-x 10)
-;;(setq sr-speedbar-max-width 10)
-;(setq speedbar-frame-parameters
-;      '((minibuffer)
-;	(width . 20)
-;	(border-width . 0)
-;	(menu-bar-lines . 0)
-;	(tool-bar-lines . 0)
-;	(unsplittable . t)
-;	(left-fringe . 0)))
 (setq speedbar-hide-button-brackets-flag t)
 (setq speedbar-show-unknown-files t)
 (setq speedbar-smart-directory-expand-flag t)
 (setq speedbar-use-images nil)
 (setq sr-speedbar-skip-other-window-p t)
-;(setq sr-speedbar-auto-refresh nil)
 (setq sr-speedbar-max-width 15)
 (setq sr-speedbar-width 15)
 (setq sr-speedbar-right-side nil)
@@ -375,21 +361,17 @@
 (global-set-key (kbd "<M-down>") 'highlight-symbol-at-point)
 ;(global-set-key (kbd "<M-left>") 'highlight-symbol-next)
 ;(global-set-key (kbd "<M-right>") 'highlight-symbol-prev)
+(setq highlight-symbol-on-navigation-p t)
 
 (when window-system
   ;(setq highlight-symbol-idle-delay 0.5)
   (dolist (hook '(emacs-lisp-mode-hook lisp-interaction-mode-hook java-mode-hook
-                                       c-mode-common-hook python-mode-hook ruby-mode-hook html-mode-hook
-                                       sh-mode-hook Info-mode-hook))
+                   c-mode-common-hook python-mode-hook ruby-mode-hook html-mode-hook
+                   sh-mode-hook Info-mode-hook))
     (add-hook hook 
       (lambda ()
         ;(highlight-symbol-mode t)
-        (highlight-symbol-nav-mode t))))
-)
-
-(setq highlight-symbol-on-navigation-p t)
-(global-set-key (kbd "C-*") 'highlight-symbol-at-point)
-(global-set-key (kbd "M-*") 'highlight-symbol-remove-all)
+        (highlight-symbol-nav-mode t)))))
 
 ;;;##############################################################
 ;; window-move
@@ -430,8 +412,7 @@
 ;; if the size is not supported very well, the frame will be clipped
 ;; so that the beginning of the buffer may not be visible correctly. 
 (if (boundp 'my-font-height)
-  (set-face-attribute 'default nil :height my-font-height)
-)
+  (set-face-attribute 'default nil :height my-font-height))
   
 ;; use specific font for Korean charset.
 ;; if you want to use different font size for specific charset,
