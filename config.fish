@@ -101,7 +101,7 @@ alias tmls='tmux list-sessions'
 
 # OS-specific customizations
 if [ (uname) = 'Darwin' ]
-    source ~/.config/mac.fish
+    source ~/.config/fish/mac.fish
 else if [ (uname) = 'Linux' ]
-    source ~/.config/linux.fish
+    source ~/.config/fish/linux.fish
 end
