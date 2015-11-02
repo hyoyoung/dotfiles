@@ -1,5 +1,5 @@
 # path
-set -x PATH /usr/local/bin $PATH
+set -x PATH $HOME/ulocal/bin /usr/local/bin $PATH
 
 # editor
 set -x EDITOR vim
