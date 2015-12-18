@@ -283,10 +283,10 @@
 (setq speedbar-smart-directory-expand-flag t)
 (setq speedbar-use-images nil)
 (setq sr-speedbar-skip-other-window-p t)
-(setq sr-speedbar-max-width 15)
-(setq sr-speedbar-width 15)
+(setq sr-speedbar-max-width 25)
+(setq sr-speedbar-width 25)
 (setq sr-speedbar-right-side nil)
-(setq sr-speedbar-width-console 10)
+(setq sr-speedbar-width-console 20)
 
 (when window-system
   (defadvice sr-speedbar-open (after sr-speedbar-open-resize-frame activate)
