@@ -1,6 +1,11 @@
 # path
 set -x PATH $HOME/ulocal/bin /usr/local/bin $PATH
 
+# golang
+set -x GOPATH /Users/morris/ulocal/go
+set -x GOROOT /usr/local/opt/go/libexec
+set -x PATH $PATH /usr/local/opt/go/libexec $GOPATH/bin $GOROOT/bin /usr/local/opt/llvm/bin
+
 # editor
 set -x EDITOR vim
 
