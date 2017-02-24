@@ -489,3 +489,24 @@ vi style of % jumping to matching brace."
  (lambda ()
    (setq pcomplete-cycle-completions nil)))
 ;(setq eshell-cmpl-cycle-completions nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+	(web-mode w3m sr-speedbar smex slime rainbow-delimiters org jedi highlight-symbol fuzzy flycheck f))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(defun save-all ()
+  (interactive)
+  (save-some-buffers t))
+
+;; auto save when lose input focus
+(add-hook 'focus-out-hook 'save-all)
