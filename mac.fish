@@ -23,3 +23,4 @@ set -x GREP_OPTIONS '--color=auto'
 set -x JAVA_HOME  (/usr/libexec/java_home)
 
 alias ls='ls -Fh'
+alias vi='vim'
