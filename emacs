@@ -102,6 +102,41 @@
 )
 
 ;;;##############################################################
+;;; window size
+;;;##############################################################
+
+; default window width and height
+(defun custom-set-frame-size ()
+  (if (boundp 'my-frame-x)
+    (add-to-list 'default-frame-alist `(top . ,my-frame-x)))
+  (if (boundp 'my-frame-y)
+    (add-to-list 'default-frame-alist `(left . ,my-frame-y)))
+  (add-to-list 'default-frame-alist `(height . ,my-frame-height))
+  (add-to-list 'default-frame-alist `(width . ,my-frame-width)))
+(custom-set-frame-size)
+(add-hook 'before-make-frame-hook 'custom-set-frame-size)
+
+;;;##############################################################
+;;; font conf
+;;;##############################################################
+
+;; default Latin font (e.g. Consolas)
+;(set-face-attribute 'default nil :family "Consolas")
+
+;; default font size (point * 10)
+;;
+;; WARNING!  Depending on the default font,
+;; if the size is not supported very well, the frame will be clipped
+;; so that the beginning of the buffer may not be visible correctly. 
+(if (boundp 'my-font-height)
+  (set-face-attribute 'default nil :height my-font-height))
+
+;; use specific font for Korean charset.
+;; if you want to use different font size for specific charset,
+;; add :size POINT-SIZE in the font-spec.
+;; (set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
+
+;;;##############################################################
 ;;; package managers
 ;;;##############################################################
   
@@ -383,41 +418,6 @@
 ;    (global-set-key [(alt up)]    'windmove-up)
 ;    (global-set-key [(alt right)] 'windmove-right)
 ;    (global-set-key [(alt down)]  'windmove-down)))
-
-;;;##############################################################
-;;; window size
-;;;##############################################################
-
-; default window width and height
-(defun custom-set-frame-size ()
-  (if (boundp 'my-frame-x)
-    (add-to-list 'default-frame-alist `(top . ,my-frame-x)))
-  (if (boundp 'my-frame-y)
-    (add-to-list 'default-frame-alist `(left . ,my-frame-y)))
-  (add-to-list 'default-frame-alist `(height . ,my-frame-height))
-  (add-to-list 'default-frame-alist `(width . ,my-frame-width)))
-(custom-set-frame-size)
-(add-hook 'before-make-frame-hook 'custom-set-frame-size)
-
-;;;##############################################################
-;;; font conf
-;;;##############################################################
-  
-;; default Latin font (e.g. Consolas)
-;(set-face-attribute 'default nil :family "Consolas")
-  
-;; default font size (point * 10)
-;;
-;; WARNING!  Depending on the default font,
-;; if the size is not supported very well, the frame will be clipped
-;; so that the beginning of the buffer may not be visible correctly. 
-(if (boundp 'my-font-height)
-  (set-face-attribute 'default nil :height my-font-height))
-  
-;; use specific font for Korean charset.
-;; if you want to use different font size for specific charset,
-;; add :size POINT-SIZE in the font-spec.
-;; (set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
 
 ;;;##############################################################
 ;;; misc - vi style behaviours
