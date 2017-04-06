@@ -252,8 +252,8 @@
     (setq python-indent-offset 4) 
     (setq show-trailing-whitespace t)))
 
-(setq jedi:environment-virtualenv
-      (list "pyvenv-3.5" "--system-site-packages"))
+;(setq jedi:environment-virtualenv
+;      (list "pyvenv-3.6" "--system-site-packages"))
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:setup-keys t)
 (setq jedi:complete-on-dot t)
@@ -496,7 +496,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(web-mode w3m sr-speedbar smex slime rainbow-delimiters org jedi highlight-symbol fuzzy flycheck f))))
+     (web-mode w3m sr-speedbar smex slime rainbow-delimiters org jedi highlight-symbol fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -510,3 +510,5 @@ vi style of % jumping to matching brace."
 
 ;; auto save when lose input focus
 (add-hook 'focus-out-hook 'save-all)
+
+; https://github.com/purcell/exec-path-from-shell
