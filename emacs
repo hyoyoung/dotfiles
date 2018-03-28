@@ -470,9 +470,9 @@ vi style of % jumping to matching brace."
 (global-unset-key "\C-x\C-z") ; don't suspend
 ;(global-unset-key "\C-xz") ; don't repeat
 
-;verbose print in buffer title with absolute path
-(when window-system
-  (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
+;; auto save when lose input focus
+;(add-hook 'focus-out-hook 'save-buffer)
+(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 
 ;show empty lines
 ;(setq-default indicate-empty-lines t)
@@ -497,18 +497,5 @@ vi style of % jumping to matching brace."
  '(package-selected-packages
    (quote
      (web-mode w3m sr-speedbar smex slime rainbow-delimiters org jedi highlight-symbol fuzzy flycheck f))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-(defun save-all ()
-  (interactive)
-  (save-some-buffers t))
-
-;; auto save when lose input focus
-(add-hook 'focus-out-hook 'save-all)
 
 ; https://github.com/purcell/exec-path-from-shell
