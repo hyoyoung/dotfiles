@@ -102,6 +102,41 @@
 )
 
 ;;;##############################################################
+;;; window size
+;;;##############################################################
+
+; default window width and height
+(defun custom-set-frame-size ()
+  (if (boundp 'my-frame-x)
+    (add-to-list 'default-frame-alist `(top . ,my-frame-x)))
+  (if (boundp 'my-frame-y)
+    (add-to-list 'default-frame-alist `(left . ,my-frame-y)))
+  (add-to-list 'default-frame-alist `(height . ,my-frame-height))
+  (add-to-list 'default-frame-alist `(width . ,my-frame-width)))
+(custom-set-frame-size)
+(add-hook 'before-make-frame-hook 'custom-set-frame-size)
+
+;;;##############################################################
+;;; font conf
+;;;##############################################################
+
+;; default Latin font (e.g. Consolas)
+;(set-face-attribute 'default nil :family "Consolas")
+
+;; default font size (point * 10)
+;;
+;; WARNING!  Depending on the default font,
+;; if the size is not supported very well, the frame will be clipped
+;; so that the beginning of the buffer may not be visible correctly. 
+(if (boundp 'my-font-height)
+  (set-face-attribute 'default nil :height my-font-height))
+
+;; use specific font for Korean charset.
+;; if you want to use different font size for specific charset,
+;; add :size POINT-SIZE in the font-spec.
+;; (set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
+
+;;;##############################################################
 ;;; package managers
 ;;;##############################################################
   
@@ -217,8 +252,8 @@
     (setq python-indent-offset 4) 
     (setq show-trailing-whitespace t)))
 
-(setq jedi:environment-virtualenv
-      (list "pyvenv-3.5" "--system-site-packages"))
+;(setq jedi:environment-virtualenv
+;      (list "pyvenv-3.6" "--system-site-packages"))
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:setup-keys t)
 (setq jedi:complete-on-dot t)
@@ -385,41 +420,6 @@
 ;    (global-set-key [(alt down)]  'windmove-down)))
 
 ;;;##############################################################
-;;; window size
-;;;##############################################################
-
-; default window width and height
-(defun custom-set-frame-size ()
-  (if (boundp 'my-frame-x)
-    (add-to-list 'default-frame-alist `(top . ,my-frame-x)))
-  (if (boundp 'my-frame-y)
-    (add-to-list 'default-frame-alist `(left . ,my-frame-y)))
-  (add-to-list 'default-frame-alist `(height . ,my-frame-height))
-  (add-to-list 'default-frame-alist `(width . ,my-frame-width)))
-(custom-set-frame-size)
-(add-hook 'before-make-frame-hook 'custom-set-frame-size)
-
-;;;##############################################################
-;;; font conf
-;;;##############################################################
-  
-;; default Latin font (e.g. Consolas)
-;(set-face-attribute 'default nil :family "Consolas")
-  
-;; default font size (point * 10)
-;;
-;; WARNING!  Depending on the default font,
-;; if the size is not supported very well, the frame will be clipped
-;; so that the beginning of the buffer may not be visible correctly. 
-(if (boundp 'my-font-height)
-  (set-face-attribute 'default nil :height my-font-height))
-  
-;; use specific font for Korean charset.
-;; if you want to use different font size for specific charset,
-;; add :size POINT-SIZE in the font-spec.
-;; (set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
-
-;;;##############################################################
 ;;; misc - vi style behaviours
 ;;;#############################################################
 ;;---
@@ -470,9 +470,9 @@ vi style of % jumping to matching brace."
 (global-unset-key "\C-x\C-z") ; don't suspend
 ;(global-unset-key "\C-xz") ; don't repeat
 
-;verbose print in buffer title with absolute path
-(when window-system
-  (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
+;; auto save when lose input focus
+;(add-hook 'focus-out-hook 'save-buffer)
+(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 
 ;show empty lines
 ;(setq-default indicate-empty-lines t)
@@ -496,17 +496,6 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(web-mode w3m sr-speedbar smex slime rainbow-delimiters org jedi highlight-symbol fuzzy flycheck f))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+     (web-mode w3m sr-speedbar smex slime rainbow-delimiters org jedi highlight-symbol fuzzy flycheck f))))
 
-(defun save-all ()
-  (interactive)
-  (save-some-buffers t))
-
-;; auto save when lose input focus
-(add-hook 'focus-out-hook 'save-all)
+; https://github.com/purcell/exec-path-from-shell
