@@ -1,10 +1,12 @@
 # path
-set -x PATH $HOME/ulocal/bin /usr/local/bin $PATH
+set -x PATH $HOME/local/bin $PATH
+# scala 2.11
+set -x PATH /usr/local/opt/scala@2.11/bin $PATH
 
 # golang
-set -x GOPATH /Users/morris/ulocal/go
+set -x GOPATH /Users/hyoyoung/local/go
 set -x GOROOT /usr/local/opt/go/libexec
-set -x PATH $PATH /usr/local/opt/go/libexec $GOPATH/bin $GOROOT/bin /usr/local/opt/llvm/bin
+set -x PATH $PATH $GOPATH/bin $GOROOT/bin /usr/local/opt/llvm/bin
 
 # editor
 set -x EDITOR vim
@@ -20,7 +22,10 @@ set -x LSCOLORS "ExGxBxDxCxEgEdxbxgacxd"
 set -x GREP_OPTIONS '--color=auto'
 
 # java dir path
-set -x JAVA_HOME  (/usr/libexec/java_home)
+#set -x JAVA_HOME  (/usr/libexec/java_home)
+
+# add password manager
+source /usr/local/share/fish/vendor_completions.d/pass.fish
 
 alias ls='ls -Fh'
 alias vi='vim'

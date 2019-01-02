@@ -51,10 +51,14 @@
   ;; key bindings
   ;(setq mac-option-modifier 'super)
   ;(setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'meta)
   (define-key global-map [home] 'beginning-of-line)
   (define-key global-map [end] 'end-of-line)
   (define-key global-map [help] 'overwrite-mode)
   (define-key global-map [S-help] 'clipboard-yank)
+
+  ; unset unused keys
+  (global-unset-key (kbd "S-SPC")) ; switch input method
 
   ;; path
   (setq brew-bin-path "/usr/local/bin/")
@@ -65,6 +69,7 @@
           (concat brew-bin-path ":"
                   (getenv "PATH"))
   )
+  (setenv "GOPATH" "/Users/hyoyoung/local/go")
   ;; add brew path to eshell's path
   (add-hook 'eshell-mode-hook
      '(lambda nil
@@ -79,8 +84,8 @@
   ((string-equal system-type "darwin")   ; Mac OS X
     (progn
       (setq my-frame-height 45)
-      (setq my-frame-width 150)
-      (setq my-font-height 150)
+      (setq my-frame-width 180)
+      (setq my-font-height 140)
 
       (my-darwin-conf)
     )
@@ -145,8 +150,6 @@
              '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
   
 ;;;##############################################################
@@ -171,12 +174,12 @@
 
 (add-to-list 'custom-theme-load-path
   (file-name-as-directory "~/.emacs.d/site-lisp/midnight-dawn-theme"))
-; https://github.com/emacs-jp/replace-colorthemes
-(add-to-list 'custom-theme-load-path
-  (file-name-as-directory "~/.emacs.d/site-lisp/replace-colorthemes"))
-; https://github.com/ChrisKempson/Tomorrow-Theme
-(add-to-list 'custom-theme-load-path
-  (file-name-as-directory "~/.emacs.d/site-lisp/tomorrow-theme"))
+;; https://github.com/emacs-jp/replace-colorthemes
+;(add-to-list 'custom-theme-load-path
+;  (file-name-as-directory "~/.emacs.d/site-lisp/replace-colorthemes"))
+;; https://github.com/ChrisKempson/Tomorrow-Theme
+;(add-to-list 'custom-theme-load-path
+;  (file-name-as-directory "~/.emacs.d/site-lisp/tomorrow-theme"))
 
 ;;;##############################################################
 ;;; global setting
@@ -280,6 +283,22 @@
 (setq web-mode-engines-alist 
   '(("django" . "\\.html\\'")
     ("php" . "\\.php\\.")) )
+
+;;;##############################################################
+;;; 프로그래밍 모드 - golang
+;;;##############################################################
+(add-hook 'go-mode-hook
+  (lambda ()
+    (go-eldoc-setup)
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (setq exec-path (append exec-path '("~/local/go/bin/")))
+    (setq tab-width 4)
+    (setq indent-tabs-mode 1)
+    (auto-complete-mode 1)
+    (setq show-trailing-whitespace t)))
+
+(with-eval-after-load 'go-mode
+   (require 'go-autocomplete))
 
 ;;;##############################################################
 ;;; slime
@@ -402,6 +421,7 @@
   ;(setq highlight-symbol-idle-delay 0.5)
   (dolist (hook '(emacs-lisp-mode-hook lisp-interaction-mode-hook java-mode-hook
                    c-mode-common-hook python-mode-hook ruby-mode-hook html-mode-hook
+                   go-mode-hook
                    sh-mode-hook Info-mode-hook))
     (add-hook hook 
       (lambda ()
@@ -463,6 +483,9 @@ vi style of % jumping to matching brace."
 ;;;#############################################################
 (require 'tramp)
 (setq tramp-default-method "ssh")
+;(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+;(setq tramp-debug-buffer t)
+:(setq tramp-verbose 10)
 
 ; unset unused keys
 (global-unset-key "\C-x\C-n") ; set-goal-column
@@ -479,9 +502,9 @@ vi style of % jumping to matching brace."
 ;(when (not indicate-empty-lines)
 ;  (toggle-indicate-empty-lines))
 
-(require 'w3m)
-;(setq w3m-use-cookies t)
-(setq w3m-default-display-inline-images t)
+;(require 'w3m)
+;;(setq w3m-use-cookies t)
+;(setq w3m-default-display-inline-images t)
 
 ;eshell completion
 (add-hook
@@ -496,6 +519,12 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-     (web-mode w3m sr-speedbar smex slime rainbow-delimiters org jedi highlight-symbol fuzzy flycheck f))))
+    (flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 
 ; https://github.com/purcell/exec-path-from-shell
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
