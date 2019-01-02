@@ -337,10 +337,10 @@
 (setq speedbar-smart-directory-expand-flag t)
 (setq speedbar-use-images nil)
 (setq sr-speedbar-skip-other-window-p t)
-(setq sr-speedbar-max-width 25)
-(setq sr-speedbar-width 25)
+(setq sr-speedbar-max-width 15)
+(setq sr-speedbar-width 15)
 (setq sr-speedbar-right-side nil)
-(setq sr-speedbar-width-console 20)
+(setq sr-speedbar-width-console 10)
 
 (when window-system
   (defadvice sr-speedbar-open (after sr-speedbar-open-resize-frame activate)
@@ -503,7 +503,7 @@ vi style of % jumping to matching brace."
 ;  (toggle-indicate-empty-lines))
 
 ;(require 'w3m)
-;;(setq w3m-use-cookies t)
+;(setq w3m-use-cookies t)
 ;(setq w3m-default-display-inline-images t)
 
 ;eshell completion
