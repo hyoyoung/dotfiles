@@ -485,7 +485,7 @@ vi style of % jumping to matching brace."
 (setq tramp-default-method "ssh")
 ;(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 ;(setq tramp-debug-buffer t)
-:(setq tramp-verbose 10)
+;(setq tramp-verbose 10)
 
 ; unset unused keys
 (global-unset-key "\C-x\C-n") ; set-goal-column
