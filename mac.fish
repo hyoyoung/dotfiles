@@ -1,12 +1,15 @@
 # path
 set -x PATH $HOME/local/bin $PATH
-# scala 2.11
+# brew utils
 set -x PATH /usr/local/opt/scala@2.11/bin $PATH
+set -x PATH /usr/local/opt/curl/bin $PATH
+set -x PATH /usr/local/opt/llvm/bin $PATH
+set -x PATH /usr/local/opt/openssl/bin $PATH
 
 # golang
 set -x GOPATH /Users/hyoyoung/local/go
 set -x GOROOT /usr/local/opt/go/libexec
-set -x PATH $PATH $GOPATH/bin $GOROOT/bin /usr/local/opt/llvm/bin
+set -x PATH $PATH $GOPATH/bin $GOROOT/bin
 
 # editor
 set -x EDITOR vim
