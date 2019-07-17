@@ -99,7 +99,7 @@
       (setq my-frame-y 20)
       (setq my-frame-height 40)
       (setq my-frame-width 135)
-      (setq my-font-height 95)
+      (setq my-font-height 85)
 
       (my-linux-conf)
     )
