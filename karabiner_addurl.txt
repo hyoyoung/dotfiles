@@ -1,0 +1,1 @@
+karabiner://karabiner/assets/complex_modifications/import?url=file%3A///Users/your_id/karabiner_mypcstyles.json
