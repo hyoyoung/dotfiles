@@ -6,6 +6,9 @@ set -x EDITOR vim
 
 set -x PS1 "\u@\h:\w\$ "
 
+# read dircolors
+eval (dircolors -c)
+
 # Tell grep to highlight matches
 #set -x GREP_OPTIONS '--color=auto'
 
