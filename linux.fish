@@ -26,3 +26,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias sysupdate='sudo apt-get update && sudo apt-get dselect-upgrade -y && sudo apt-get clean'
+alias open='xdg-open'
+alias chrome_hidpi='chromium-browser --force-device-scale-factor=2'
