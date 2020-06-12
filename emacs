@@ -36,6 +36,8 @@
       (global-set-key (kbd "S-C-<up>") 'enlarge-window)
     )
   )
+  (setenv "GOPATH" "/home/hyoyoung/local/go")
+  (add-to-list 'exec-path "/home/hyoyoung/local/go/bin")
 )
 
 ;;;##############################################################
@@ -325,6 +327,11 @@
    (require 'go-autocomplete))
 
 (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+(add-hook 'go-mode-hook #'flycheck-mode)
+
+(require 'flycheck)
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
 
 
 ;;;##############################################################
