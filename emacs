@@ -305,6 +305,7 @@
       (set (make-local-variable 'compile-command)
            "go build -v && go test -v && go vet"))
 
+  ; go get github.com/rogpeppe/godef
   (local-set-key (kbd "M-.") 'godef-jump)
   (local-set-key (kbd "M-*") 'pop-tag-mark))
 
