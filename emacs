@@ -287,18 +287,44 @@
 ;;;##############################################################
 ;;; 프로그래밍 모드 - golang
 ;;;##############################################################
-(add-hook 'go-mode-hook
-  (lambda ()
-    (go-eldoc-setup)
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (setq exec-path (append exec-path '("~/local/go/bin/")))
-    (setq tab-width 4)
-    (setq indent-tabs-mode 1)
-    (auto-complete-mode 1)
-    (setq show-trailing-whitespace t)))
+(require 'go-mode)
+    (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
+
+; go get golang.org/x/tools/cmd/guru
+(require 'go-guru)
+
+(defun my-go-mode-hook ()
+  ;; prefer goimports, if present
+  (if (executable-find "goimports")
+    (setq gofmt-command "goimports"))
+
+  (add-hook 'before-save-hook 'gofmt-before-save)
+
+  ; Customize compile command to run go build
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+           "go build -v && go test -v && go vet"))
+
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (local-set-key (kbd "M-*") 'pop-tag-mark))
+
+  (go-eldoc-setup)
+  (setq exec-path (append exec-path '("~/local/go/bin/")))
+  (setq tab-width 4)
+  (setq indent-tabs-mode t)
+  (setq show-trailing-whitespace t)
+(add-hook 'go-mode-hook 'my-go-mode-hook)
+
+;github.com/stamblerre/gocode
+(defun auto-complete-for-go ()
+  (auto-complete-mode 1))
+(add-hook 'go-mode-hook 'auto-complete-for-go)
 
 (with-eval-after-load 'go-mode
    (require 'go-autocomplete))
+
+(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+
 
 ;;;##############################################################
 ;;; slime
@@ -519,7 +545,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (go-guru go-autocomplete flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 
 ; https://github.com/purcell/exec-path-from-shell
 (custom-set-faces

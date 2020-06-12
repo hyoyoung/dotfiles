@@ -1,5 +1,10 @@
 # path
-#set -x PATH /usr/local/bin $PATH
+set -x PATH $PATH /usr/local/bin
+
+# golang
+set -x GOPATH /home/hyoyoung/local/go
+set -x GOROOT /usr/lib/go
+set -x PATH $PATH $GOPATH/bin $GOROOT/bin
 
 # editor
 set -x EDITOR vim
@@ -29,3 +34,7 @@ alias l='ls -CF'
 alias sysupdate='sudo apt-get update && sudo apt-get dselect-upgrade -y && sudo apt-get clean'
 alias open='xdg-open'
 alias chrome_hidpi='chromium-browser --force-device-scale-factor=2'
+
+# activate conda
+set -x PATH $PATH /home/hyoyoung/local/anaconda3/bin
+source (conda info --root)/etc/fish/conf.d/conda.fish
