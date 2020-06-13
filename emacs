@@ -328,8 +328,15 @@
                                    go-test
                                    go-errcheck))
 
-(setq flycheck-golangci-lint-enable-all t)
-;(setq flycheck-golangci-lint-enable-linters '("lll" "structcheck"))
+;(setq flycheck-golangci-lint-enable-all t)
+(setq flycheck-golangci-lint-disable-all t)
+(setq flycheck-golangci-lint-enable-linters
+      '("deadcode" "errcheck" "gocritic" "gocyclo" "gosimple" "govet"
+	"ineffassign" "staticcheck" "structcheck" "typecheck" "unused" "varcheck"
+	"gofmt" "golint" "nakedret" "misspell" "unconvert" "unparam" "gocritic" "gosec"
+	"goconst" "goprintffuncname" "whitespace"
+	))
+
 
 (with-eval-after-load 'go-mode
    (require 'go-autocomplete))
