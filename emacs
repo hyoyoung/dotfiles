@@ -292,8 +292,47 @@
 (require 'go-mode)
     (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
 
+;go get -u github.com/kisielk/errcheck
+;go get -u golang.org/x/lint/golint
+(add-to-list 'load-path (concat (getenv "GOPATH")  "/src/golang.org/x/lint/misc/emacs/"))
+(require 'golint)
+
+(require 'govet)
+;go get github.com/godoctor/godoctor
+(require 'godoctor)
+
 ; go get golang.org/x/tools/cmd/guru
 (require 'go-guru)
+
+; go get github.com/golangci/golangci-lint/cmd/golangci-lint
+; # binary will be $(go env GOPATH)/bin/golangci-lint
+; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+(defun my-flycheck-go-mode-hook ()
+  (flycheck-golangci-lint-setup)
+  (flycheck-color-mode-line-mode))
+
+(require 'flycheck)
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'my-flycheck-go-mode-hook))
+
+(setq flycheck-check-syntax-automatically '(save mode-enable)
+      flycheck-idle-change-delay 3.0)
+;; the default value was '(save idle-change new-line mode-enabled)
+
+(setq flycheck-golangci-lint-deadline "1m")
+(setq flycheck-golangci-lint-fast t)
+(setq flycheck-disabled-checkers '(go-gofmt
+                                   go-golint
+                                   go-vet
+                                   go-build
+                                   go-test
+                                   go-errcheck))
+
+(setq flycheck-golangci-lint-enable-all t)
+;(setq flycheck-golangci-lint-enable-linters '("lll" "structcheck"))
+
+(with-eval-after-load 'go-mode
+   (require 'go-autocomplete))
 
 (defun my-go-mode-hook ()
   ;; prefer goimports, if present
@@ -309,30 +348,23 @@
 
   ; go get github.com/rogpeppe/godef
   (local-set-key (kbd "M-.") 'godef-jump)
-  (local-set-key (kbd "M-*") 'pop-tag-mark))
+  (local-set-key (kbd "M-*") 'pop-tag-mark)
+  (local-set-key (kbd "M-p") 'compile)
+  (local-set-key (kbd "M-P") 'recompile)
+  (local-set-key (kbd "M-]") 'next-error)
+  (local-set-key (kbd "M-[") 'previous-error)
 
+  ;github.com/stamblerre/gocode
+  (auto-complete-mode 1)
   (go-eldoc-setup)
   (setq exec-path (append exec-path '("~/local/go/bin/")))
   (setq tab-width 4)
   (setq indent-tabs-mode t)
-  (setq show-trailing-whitespace t)
+  (setq show-trailing-whitespace t))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
-
-;github.com/stamblerre/gocode
-(defun auto-complete-for-go ()
-  (auto-complete-mode 1))
-(add-hook 'go-mode-hook 'auto-complete-for-go)
-
-(with-eval-after-load 'go-mode
-   (require 'go-autocomplete))
 
 (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
 (add-hook 'go-mode-hook #'flycheck-mode)
-
-(require 'flycheck)
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
-
 
 ;;;##############################################################
 ;;; slime
@@ -553,7 +585,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (go-guru go-autocomplete flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (go-errcheck go-rename godoctor govet flycheck-color-mode-line go-guru go-autocomplete flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 
 ; https://github.com/purcell/exec-path-from-shell
 (custom-set-faces
