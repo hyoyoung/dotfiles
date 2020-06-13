@@ -334,7 +334,7 @@
       '("deadcode" "errcheck" "gocritic" "gocyclo" "gosimple" "govet"
 	"ineffassign" "staticcheck" "structcheck" "typecheck" "unused" "varcheck"
 	"gofmt" "golint" "nakedret" "misspell" "unconvert" "unparam" "gocritic" "gosec"
-	"goconst" "goprintffuncname" "whitespace"
+	"goconst" "goprintffuncname" "whitespace" "lll"
 	))
 
 
