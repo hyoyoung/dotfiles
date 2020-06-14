@@ -232,6 +232,9 @@
 ; for mule
 (define-coding-system-alias 'utf8 'utf-8)
 
+;; autocomplete paired brackets
+(electric-pair-mode 1)
+
 ;;;##############################################################
 ;;; load theme
 ;;;#############################################################
