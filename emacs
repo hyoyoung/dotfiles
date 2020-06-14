@@ -234,6 +234,7 @@
 
 ;; autocomplete paired brackets
 (electric-pair-mode 1)
+;(setq-default electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 
 ;;;##############################################################
 ;;; load theme
