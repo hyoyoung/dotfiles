@@ -365,7 +365,7 @@
   (local-set-key (kbd "M-]") 'next-error)
   (local-set-key (kbd "M-[") 'previous-error)
 
-  ;github.com/stamblerre/gocode
+  ;go get github.com/stamblerre/gocode
   (auto-complete-mode 1)
   (go-eldoc-setup)
   (setq exec-path (append exec-path '("~/local/go/bin/")))
