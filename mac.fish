@@ -1,7 +1,8 @@
 # path
+set -x PATH /usr/local/sbin $PATH
 set -x PATH $HOME/local/bin $PATH
 # brew utils
-set -x PATH /usr/local/opt/scala@2.11/bin $PATH
+set -x PATH /usr/local/opt/scala@2.13/bin $PATH
 set -x PATH /usr/local/opt/curl/bin $PATH
 set -x PATH /usr/local/opt/llvm/bin $PATH
 set -x PATH /usr/local/opt/openssl/bin $PATH
@@ -10,6 +11,9 @@ set -x PATH /usr/local/opt/openssl/bin $PATH
 set -x GOPATH /Users/hyoyoung/local/go
 set -x GOROOT /usr/local/opt/go/libexec
 set -x PATH $PATH $GOPATH/bin $GOROOT/bin
+
+# ncc
+set -x PATH $PATH /Users/hyoyoung/local/ncc
 
 # editor
 set -x EDITOR vim
