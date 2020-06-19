@@ -208,12 +208,12 @@
 (ido-mode t)
 
 ;;; Smex
-(require 'smex)
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;(require 'smex)
+;(smex-initialize)
+;(global-set-key (kbd "M-x") 'smex)
+;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;;;; This is your old M-x.
+;(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; font-lock-mode
 (global-font-lock-mode t)
@@ -293,89 +293,89 @@
 ;;;##############################################################
 ;;; 프로그래밍 모드 - golang
 ;;;##############################################################
-(require 'go-mode)
-    (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
-
-;go get -u github.com/kisielk/errcheck
-;go get -u golang.org/x/lint/golint
-(add-to-list 'load-path (concat (getenv "GOPATH")  "/src/golang.org/x/lint/misc/emacs/"))
-(require 'golint)
-
-(require 'govet)
-;go get github.com/godoctor/godoctor
-(require 'godoctor)
-
-; go get golang.org/x/tools/cmd/guru
-(require 'go-guru)
-
-; go get github.com/golangci/golangci-lint/cmd/golangci-lint
-; # binary will be $(go env GOPATH)/bin/golangci-lint
-; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
-(defun my-flycheck-go-mode-hook ()
-  (flycheck-golangci-lint-setup)
-  (flycheck-color-mode-line-mode))
-
-(require 'flycheck)
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'my-flycheck-go-mode-hook))
-
-(setq flycheck-check-syntax-automatically '(save mode-enable)
-      flycheck-idle-change-delay 3.0)
-;; the default value was '(save idle-change new-line mode-enabled)
-
-(setq flycheck-golangci-lint-deadline "1m")
-(setq flycheck-golangci-lint-fast t)
-(setq flycheck-disabled-checkers '(go-gofmt
-                                   go-golint
-                                   go-vet
-                                   go-build
-                                   go-test
-                                   go-errcheck))
-
-;(setq flycheck-golangci-lint-enable-all t)
-(setq flycheck-golangci-lint-disable-all t)
-(setq flycheck-golangci-lint-enable-linters
-      '("deadcode" "errcheck" "gocritic" "gocyclo" "gosimple" "govet"
-	"ineffassign" "staticcheck" "structcheck" "typecheck" "unused" "varcheck"
-	"gofmt" "golint" "nakedret" "misspell" "unconvert" "unparam" "gocritic" "gosec"
-	"goconst" "goprintffuncname" "whitespace" "lll"
-	))
-
-
-(with-eval-after-load 'go-mode
-   (require 'go-autocomplete))
-
-(defun my-go-mode-hook ()
-  ;; prefer goimports, if present
-  (if (executable-find "goimports")
-    (setq gofmt-command "goimports"))
-
-  (add-hook 'before-save-hook 'gofmt-before-save)
-
-  ; Customize compile command to run go build
-  (if (not (string-match "go" compile-command))
-      (set (make-local-variable 'compile-command)
-           "go build -v && go test -v && go vet"))
-
-  ; go get github.com/rogpeppe/godef
-  (local-set-key (kbd "M-.") 'godef-jump)
-  (local-set-key (kbd "M-*") 'pop-tag-mark)
-  (local-set-key (kbd "M-p") 'compile)
-  (local-set-key (kbd "M-P") 'recompile)
-  (local-set-key (kbd "M-]") 'next-error)
-  (local-set-key (kbd "M-[") 'previous-error)
-
-  ;go get github.com/stamblerre/gocode
-  (auto-complete-mode 1)
-  (go-eldoc-setup)
-  (setq exec-path (append exec-path '("~/local/go/bin/")))
-  (setq tab-width 4)
-  (setq indent-tabs-mode t)
-  (setq show-trailing-whitespace t))
-(add-hook 'go-mode-hook 'my-go-mode-hook)
-
-(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-(add-hook 'go-mode-hook #'flycheck-mode)
+;(require 'go-mode)
+;    (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
+;
+;;go get -u github.com/kisielk/errcheck
+;;go get -u golang.org/x/lint/golint
+;(add-to-list 'load-path (concat (getenv "GOPATH")  "/src/golang.org/x/lint/misc/emacs/"))
+;(require 'golint)
+;
+;(require 'govet)
+;;go get github.com/godoctor/godoctor
+;(require 'godoctor)
+;
+;; go get golang.org/x/tools/cmd/guru
+;(require 'go-guru)
+;
+;; go get github.com/golangci/golangci-lint/cmd/golangci-lint
+;; # binary will be $(go env GOPATH)/bin/golangci-lint
+;; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+;(defun my-flycheck-go-mode-hook ()
+;  (flycheck-golangci-lint-setup)
+;  (flycheck-color-mode-line-mode))
+;
+;(require 'flycheck)
+;(eval-after-load 'flycheck
+;  '(add-hook 'flycheck-mode-hook #'my-flycheck-go-mode-hook))
+;
+;(setq flycheck-check-syntax-automatically '(save mode-enable)
+;      flycheck-idle-change-delay 3.0)
+;;; the default value was '(save idle-change new-line mode-enabled)
+;
+;(setq flycheck-golangci-lint-deadline "1m")
+;(setq flycheck-golangci-lint-fast t)
+;(setq flycheck-disabled-checkers '(go-gofmt
+;                                   go-golint
+;                                   go-vet
+;                                   go-build
+;                                   go-test
+;                                   go-errcheck))
+;
+;;(setq flycheck-golangci-lint-enable-all t)
+;(setq flycheck-golangci-lint-disable-all t)
+;(setq flycheck-golangci-lint-enable-linters
+;      '("deadcode" "errcheck" "gocritic" "gocyclo" "gosimple" "govet"
+;	"ineffassign" "staticcheck" "structcheck" "typecheck" "unused" "varcheck"
+;	"gofmt" "golint" "nakedret" "misspell" "unconvert" "unparam" "gocritic" "gosec"
+;	"goconst" "goprintffuncname" "whitespace" "lll"
+;	))
+;
+;
+;(with-eval-after-load 'go-mode
+;   (require 'go-autocomplete))
+;
+;(defun my-go-mode-hook ()
+;  ;; prefer goimports, if present
+;  (if (executable-find "goimports")
+;    (setq gofmt-command "goimports"))
+;
+;  (add-hook 'before-save-hook 'gofmt-before-save)
+;
+;  ; Customize compile command to run go build
+;  (if (not (string-match "go" compile-command))
+;      (set (make-local-variable 'compile-command)
+;           "go build -v && go test -v && go vet"))
+;
+;  ; go get github.com/rogpeppe/godef
+;  (local-set-key (kbd "M-.") 'godef-jump)
+;  (local-set-key (kbd "M-*") 'pop-tag-mark)
+;  (local-set-key (kbd "M-p") 'compile)
+;  (local-set-key (kbd "M-P") 'recompile)
+;  (local-set-key (kbd "M-]") 'next-error)
+;  (local-set-key (kbd "M-[") 'previous-error)
+;
+;  ;go get github.com/stamblerre/gocode
+;  (auto-complete-mode 1)
+;  (go-eldoc-setup)
+;  (setq exec-path (append exec-path '("~/local/go/bin/")))
+;  (setq tab-width 4)
+;  (setq indent-tabs-mode t)
+;  (setq show-trailing-whitespace t))
+;(add-hook 'go-mode-hook 'my-go-mode-hook)
+;
+;(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+;(add-hook 'go-mode-hook #'flycheck-mode)
 
 ;;;##############################################################
 ;;; slime
@@ -385,6 +385,86 @@
 ;; Set your lisp system and, optionally, some contribs
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
 (setq slime-contribs '(slime-fancy))
+
+;;;##############################################################
+;;; lsp
+;;;##############################################################
+
+(setq lsp-gopls-staticcheck t)
+(setq lsp-eldoc-render-all t)
+(setq lsp-gopls-complete-unimported t)
+
+;;;##############################################################
+;;; lsp - golang
+;;;##############################################################
+
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (go-mode . lsp-deferred))
+
+;;Set up before-save hooks to format buffer and add/delete imports.
+;;Make sure you don't have other gofmt/goimports hooks enabled.
+
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;;Optional - provides fancier overlays.
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :init)
+
+(require 'color)
+
+(let ((bg (face-attribute 'default :background)))
+  (custom-set-faces
+  `(highlight ((t (:background "gray72" :foreground "black" :weight bold))))
+  `(region ((t (:background "#525353" :foreground "darkgray"))))
+  `(company-preview ((t (:foreground "darkgray" ::underline t))))
+  `(company-preview-common ((t (:inherit company-preview))))
+  `(company-scrollbar-bg ((t (:background "gray13" :foreground "darkgray"))))
+  `(company-scrollbar-fg ((t (:background "darkgray" :foreground "gray13"))))
+  `(company-tooltip ((t (:background "gray13" :foreground "darkgray"))))
+  `(company-tooltip-common ((((type x)) (:inherit company-tooltip :weight bold)) (t (:inherit company-tooltip))))
+  `(company-tooltip-selection ((t (:background "steelblue" :foreground "darkgray"))))
+  `(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
+  `(company-tooltip-annotation ((t (:foreground "gray31" :weight bold))))
+
+   ))
+
+;;Company mode is a standard completion package that works well with lsp-mode.
+;;company-lsp integrates company mode completion with lsp-mode.
+;;completion-at-point also works out of the box but doesn't support snippets.
+
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+;;Optional - provides snippet support.
+
+(use-package yasnippet
+  :ensure t
+  :commands yas-minor-mode
+  :hook (go-mode . yas-minor-mode))
+
+;;lsp-ui-doc-enable is false because I don't like the popover that shows up on the right
+;;I'll change it if I want it back
+
+(setq lsp-ui-doc-enable nil
+      lsp-ui-peek-enable t
+      lsp-ui-sideline-enable t
+      lsp-ui-imenu-enable t
+      lsp-ui-flycheck-enable t)
 
 ;;;##############################################################
 ;;; rainbow-delimiter
@@ -583,6 +663,7 @@ vi style of % jumping to matching brace."
 ;(setq w3m-use-cookies t)
 ;(setq w3m-default-display-inline-images t)
 
+
 ;eshell completion
 (add-hook
  'eshell-mode-hook
@@ -596,12 +677,4 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (go-errcheck go-rename godoctor govet flycheck-color-mode-line go-guru go-autocomplete flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
-
-; https://github.com/purcell/exec-path-from-shell
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+    (yasnippet use-package company company-go company-lsp lsp-ui lsp-mode go-errcheck go-rename godoctor govet flycheck-color-mode-line go-guru go-autocomplete flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
