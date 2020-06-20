@@ -418,24 +418,6 @@
   :commands lsp-ui-mode
   :init)
 
-(require 'color)
-
-(let ((bg (face-attribute 'default :background)))
-  (custom-set-faces
-  `(highlight ((t (:background "gray72" :foreground "black" :weight bold))))
-  `(region ((t (:background "#525353" :foreground "darkgray"))))
-  `(company-preview ((t (:foreground "darkgray" ::underline t))))
-  `(company-preview-common ((t (:inherit company-preview))))
-  `(company-scrollbar-bg ((t (:background "gray13" :foreground "darkgray"))))
-  `(company-scrollbar-fg ((t (:background "darkgray" :foreground "gray13"))))
-  `(company-tooltip ((t (:background "gray13" :foreground "darkgray"))))
-  `(company-tooltip-common ((((type x)) (:inherit company-tooltip :weight bold)) (t (:inherit company-tooltip))))
-  `(company-tooltip-selection ((t (:background "steelblue" :foreground "darkgray"))))
-  `(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
-  `(company-tooltip-annotation ((t (:foreground "gray31" :weight bold))))
-
-   ))
-
 ;;Company mode is a standard completion package that works well with lsp-mode.
 ;;company-lsp integrates company mode completion with lsp-mode.
 ;;completion-at-point also works out of the box but doesn't support snippets.

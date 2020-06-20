@@ -49,8 +49,10 @@
  '(highline-face ((t (:background "grey12"))))
  '(setnu-line-number-face ((t (:background "Grey15" :foreground "White" :bold t))))
  '(show-paren-match-face ((t (:background "grey30"))))
- '(region ((t (:background "grey18"))))
- '(highlight ((t (:background "blue"))))
+ '(highlight ((t (:background "gray72" :foreground "black" :weight bold))))
+ '(region ((t (:background "#525353" :foreground "darkgray"))))
+;'(highlight ((t (:background "blue"))))
+;'(region ((t (:background "grey18"))))
  '(secondary-selection ((t (:background "navy"))))
  '(widget-field-face ((t (:background "navy"))))
  '(widget-single-line-field-face ((t (:background "royalblue"))))
@@ -75,6 +77,17 @@
  '(speedbar-highlight-face ((t (:background "green4"))))
  '(speedbar-selected-face ((t (:foreground "PaleVioletRed4" :underline t))))
  '(speedbar-tag-face ((t (:foreground "brown"))))
+
+ '(company-preview ((t (:foreground "darkgray" ::underline t))))
+ '(company-preview-common ((t (:inherit company-preview))))
+ '(company-scrollbar-bg ((t (:background "gray13" :foreground "darkgray"))))
+ '(company-scrollbar-fg ((t (:background "darkgray" :foreground "gray13"))))
+ '(company-tooltip ((t (:background "gray13" :foreground "darkgray"))))
+ '(company-tooltip-common ((((type x)) (:inherit company-tooltip :weight bold)) (t (:inherit company-tooltip))))
+ '(company-tooltip-selection ((t (:background "steelblue" :foreground "darkgray"))))
+ '(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
+ '(company-tooltip-annotation ((t (:foreground "gray31" :weight bold))))
+
 )
 
 ;;;###autoload
