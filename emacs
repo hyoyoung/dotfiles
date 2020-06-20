@@ -246,8 +246,8 @@
 ;;; 프로그래밍 모드
 ;;;##############################################################
 
-; flymake done right for syntax checking
-;(add-hook 'after-init-hook #'global-flycheck-mode)
+(require 'flycheck)
+(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - python
