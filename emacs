@@ -311,7 +311,7 @@
 
   (go-eldoc-setup)
   (setq exec-path (append exec-path '("~/local/go/bin/")))
-  ;(setq tab-width 4)
+  (setq tab-width 4)
   (setq indent-tabs-mode t)
   (setq show-trailing-whitespace t))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
