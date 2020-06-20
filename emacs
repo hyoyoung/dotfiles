@@ -296,12 +296,6 @@
 (require 'go-mode)
     (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
 
-;go get github.com/godoctor/godoctor
-(require 'godoctor)
-
-; go get golang.org/x/tools/cmd/guru
-(require 'go-guru)
-
 (defun my-go-mode-hook ()
   ; Customize compile command to run go build
   (if (not (string-match "go" compile-command))
@@ -321,8 +315,6 @@
   (setq indent-tabs-mode t)
   (setq show-trailing-whitespace t))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
-
-(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
 
 ;;;##############################################################
 ;;; slime
@@ -347,6 +339,7 @@
 ;;; lsp - golang
 ;;;##############################################################
 
+;go get golang.org/x/tools/gopls@latest
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
@@ -412,15 +405,6 @@
   :ensure t
   :commands yas-minor-mode
   :hook (go-mode . yas-minor-mode))
-
-;;lsp-ui-doc-enable is false because I don't like the popover that shows up on the right
-;;I'll change it if I want it back
-
-;(setq lsp-ui-doc-enable nil
-;      lsp-ui-peek-enable t
-;      lsp-ui-sideline-enable t
-;      lsp-ui-imenu-enable t
-;      lsp-ui-flycheck-enable t)
 
 ;;;##############################################################
 ;;; rainbow-delimiter
@@ -633,7 +617,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (highlight-symbol rainbow-delimiters sr-speedbar smex yasnippet use-package company company-lsp lsp-ui lsp-mode godoctor flycheck-color-mode-line go-guru go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (highlight-symbol rainbow-delimiters sr-speedbar smex yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
