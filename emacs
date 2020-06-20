@@ -296,6 +296,42 @@
 (require 'go-mode)
     (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
 
+; go get github.com/golangci/golangci-lint/cmd/golangci-lint
+; # binary will be $(go env GOPATH)/bin/golangci-lint
+; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+(defun my-flycheck-go-mode-hook ()
+  (flycheck-golangci-lint-setup)
+  (flycheck-color-mode-line-mode))
+
+(require 'flycheck)
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'my-flycheck-go-mode-hook))
+
+(setq flycheck-check-syntax-automatically '(save mode-enable)
+      flycheck-idle-change-delay 3.0)
+;; the default value was '(save idle-change new-line mode-enabled)
+
+(setq flycheck-golangci-lint-deadline "1m")
+(setq flycheck-golangci-lint-fast t)
+(setq flycheck-disabled-checkers '(go-gofmt
+                                   go-golint
+                                   go-vet
+                                   go-build
+                                   go-test
+                                   go-errcheck
+                                   go-unconvert
+                                   go-staticcheck))
+
+;(setq flycheck-golangci-lint-enable-all t)
+(setq flycheck-golangci-lint-disable-all t)
+(setq flycheck-golangci-lint-enable-linters
+      '("deadcode" "errcheck" "gocritic" "gocyclo" "gosimple" "govet"
+      "ineffassign" "staticcheck" "structcheck" "typecheck" "unused" "varcheck"
+      "golint" "nakedret" "misspell" "unconvert" "unparam" "gocritic" "gosec"
+      "goconst" "goprintffuncname" "whitespace" "lll"
+      ))
+
+
 (defun my-go-mode-hook ()
   ; Customize compile command to run go build
   (if (not (string-match "go" compile-command))
@@ -315,6 +351,9 @@
   (setq indent-tabs-mode t)
   (setq show-trailing-whitespace t))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+
+(eval-after-load 'speedbar
+  '(speedbar-add-supported-extension ".go"))
 
 ;;;##############################################################
 ;;; slime
@@ -345,6 +384,7 @@
   :commands (lsp lsp-deferred)
   :hook (go-mode . lsp-deferred)
   :config
+  ;(setq lsp-prefer-flymake nil)
   (setq lsp-enable-snippet nil))
 
 ;;Set up before-save hooks to format buffer and add/delete imports.
@@ -385,8 +425,7 @@
   :config
   (setq company-idle-delay 0.3)
   (global-company-mode 1)
-  (global-set-key (kbd "C-<tab>") 'company-complete)
-)
+  (global-set-key (kbd "C-<tab>") 'company-complete))
 
 (use-package company-lsp
   :ensure t
@@ -401,10 +440,16 @@
 
 ;;Optional - provides snippet support.
 
-(use-package yasnippet
-  :ensure t
-  :commands yas-minor-mode
-  :hook (go-mode . yas-minor-mode))
+;(use-package yasnippet
+;  :ensure t
+;  :commands yas-minor-mode
+;  :hook (go-mode . yas-minor-mode))
+
+; Enable golangci lint
+(defun my-golang-flycheck-setup ()
+  "Setup Flycheck checkers for Golang"
+  (flycheck-add-next-checker 'lsp 'golangci-lint))
+(add-hook 'lsp-after-initialize-hook #'my-golang-flycheck-setup)
 
 ;;;##############################################################
 ;;; rainbow-delimiter
@@ -617,7 +662,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (highlight-symbol rainbow-delimiters sr-speedbar smex yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (flycheck-golangci-lint highlight-symbol rainbow-delimiters sr-speedbar smex yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
