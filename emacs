@@ -393,6 +393,8 @@
 (setq lsp-gopls-staticcheck t)
 (setq lsp-eldoc-render-all t)
 (setq lsp-gopls-complete-unimported t)
+(setq lsp-signature-render-documentation nil)
+;(setq lsp-signature-auto-activate nil)
 
 ;;;##############################################################
 ;;; lsp - golang
@@ -401,7 +403,9 @@
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
-  :hook (go-mode . lsp-deferred))
+  :hook (go-mode . lsp-deferred)
+  :config
+  (setq lsp-enable-snippet nil))
 
 ;;Set up before-save hooks to format buffer and add/delete imports.
 ;;Make sure you don't have other gofmt/goimports hooks enabled.
@@ -430,7 +434,9 @@
 
 (use-package company-lsp
   :ensure t
-  :commands company-lsp)
+  :commands company-lsp
+  :config
+  (setq company-lsp-enable-snippet nil))
 
 ;;Optional - provides snippet support.
 
@@ -659,4 +665,10 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet use-package company company-go company-lsp lsp-ui lsp-mode go-errcheck go-rename godoctor govet flycheck-color-mode-line go-guru go-autocomplete flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (yasnippet use-package company company-lsp lsp-ui lsp-mode go-errcheck go-rename godoctor govet flycheck-color-mode-line go-guru go-autocomplete flycheck-golangci-lint go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
