@@ -342,7 +342,7 @@
 (setq lsp-eldoc-render-all t)
 (setq lsp-gopls-complete-unimported t)
 (setq lsp-signature-render-documentation nil)
-;(setq lsp-signature-auto-activate nil)
+(setq lsp-signature-auto-activate nil)
 
 ;;;##############################################################
 ;;; lsp - golang
@@ -366,9 +366,23 @@
 ;;Optional - provides fancier overlays.
 
 (use-package lsp-ui
+  :requires lsp-mode flycheck
   :ensure t
   :commands lsp-ui-mode
-  :init)
+  :init
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-use-childframe t
+        lsp-ui-doc-position 'top
+        lsp-ui-doc-include-signature t
+        lsp-ui-sideline-enable nil
+        lsp-ui-flycheck-enable t
+        lsp-ui-flycheck-list-position 'right
+        lsp-ui-flycheck-live-reporting t
+        lsp-ui-imenu-enable t
+        lsp-ui-peek-enable t
+        lsp-ui-peek-list-width 60
+        lsp-ui-peek-peek-height 25))
 
 ;;Company mode is a standard completion package that works well with lsp-mode.
 ;;company-lsp integrates company mode completion with lsp-mode.
@@ -378,13 +392,21 @@
   :ensure t
   :config
   (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1))
+  (setq company-minimum-prefix-length 1)
+  (global-company-mode 1)
+  (global-set-key (kbd "C-<tab>") 'company-complete)
+)
 
 (use-package company-lsp
   :ensure t
   :commands company-lsp
   :config
-  (setq company-lsp-enable-snippet nil))
+  (push 'company-lsp company-backends)
+  (setq company-lsp-enable-snippet nil)
+  ;; Disable client-side cache because the LSP server does a better job.
+  (setq company-transformers nil
+        company-lsp-async t
+        company-lsp-cache-candidates nil))
 
 ;;Optional - provides snippet support.
 
@@ -396,11 +418,11 @@
 ;;lsp-ui-doc-enable is false because I don't like the popover that shows up on the right
 ;;I'll change it if I want it back
 
-(setq lsp-ui-doc-enable nil
-      lsp-ui-peek-enable t
-      lsp-ui-sideline-enable t
-      lsp-ui-imenu-enable t
-      lsp-ui-flycheck-enable t)
+;(setq lsp-ui-doc-enable nil
+;      lsp-ui-peek-enable t
+;      lsp-ui-sideline-enable t
+;      lsp-ui-imenu-enable t
+;      lsp-ui-flycheck-enable t)
 
 ;;;##############################################################
 ;;; rainbow-delimiter
