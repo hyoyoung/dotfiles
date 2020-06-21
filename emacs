@@ -152,7 +152,34 @@
              '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
+;(package-initialize)
+
+;; Initialise the packages, avoiding a re-initialisation.
+(unless (bound-and-true-p package--initialized)
+  (setq package-enable-at-startup nil)
+  (package-initialize))
+
+;; Make sure `use-package' is available.
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; Configure `use-package' prior to loading it.
+(eval-and-compile
+  (setq use-package-always-ensure nil)
+  (setq use-package-always-defer nil)
+  (setq use-package-always-demand nil)
+  (setq use-package-expand-minimally nil)
+  (setq use-package-enable-imenu-support t)
+  ;; The following is VERY IMPORTANT.  Write hooks using their real name
+  ;; instead of a shorter version: after-init ==> `after-init-hook'.
+  ;;
+  ;; This is to empower help commands with their contextual awareness,
+  ;; such as `describe-symbol'.
+  (setq use-package-hook-name-suffix nil))
+
+(eval-when-compile
+  (require 'use-package))
   
 ;;;##############################################################
 ;;; package managers - el-get
@@ -206,13 +233,15 @@
 ;InteractivelyDoThings mode to auto complete in minibuffer
 (require 'ido)
 (ido-mode t)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
 
-;; Smex
+; smex
 (require 'smex)
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;;; This is your old M-x.
+;; This is your old M-x.
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; font-lock-mode
@@ -620,7 +649,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (highlight-symbol rainbow-delimiters sr-speedbar smex yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
