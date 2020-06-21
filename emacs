@@ -227,21 +227,26 @@
 ;(setq default-truncate-lines t)
 
 ;(setq-default indent-tabs-mode nil)    ; prevent Extraneous Tabs
-(icomplete-mode)                        ; incremental minibuffer completion
+(require 'icomplete)
+(icomplete-mode 1)                      ; incremental minibuffer completion
+(setq icomplete-in-buffer t)
 (auto-compression-mode t)               ; auto handling with zipped files
 
 ;InteractivelyDoThings mode to auto complete in minibuffer
 (require 'ido)
-(ido-mode t)
+(ido-mode 1)
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
+(setq ido-complete-space-or-hyphen-mode t)
+(setq ido-confirm-unique-completion t)
+(require 'ido-completing-read+)
+(setq ido-ubiquitous-mode t)
 
-; smex
-(require 'smex)
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
+(require 'amx)
+(amx-mode 1)
+(global-set-key (kbd "M-x") 'amx)
+(global-set-key (kbd "M-X") 'amx-major-mode-commands)
+;;; This is your old M-x.
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; font-lock-mode
@@ -649,7 +654,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
