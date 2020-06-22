@@ -380,7 +380,7 @@
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
-  :hook (go-mode . lsp-deferred)
+  :hook (go-mode-hook . lsp-deferred)
   :config
   ;(setq lsp-prefer-flymake nil)
   (setq lsp-enable-snippet nil))
@@ -441,7 +441,7 @@
 ;(use-package yasnippet
 ;  :ensure t
 ;  :commands yas-minor-mode
-;  :hook (go-mode . yas-minor-mode))
+;  :hook (go-mode-hook . yas-minor-mode))
 
 ;;;##############################################################
 ;;; rainbow-delimiter
