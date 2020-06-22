@@ -315,6 +315,9 @@
 ;  :commands yas-minor-mode
 ;  :hook (go-mode-hook . yas-minor-mode))
 
+(require 'pyvenv)
+(pyvenv-activate "~/.emacs.d/venv3/")
+
 ;;;##############################################################
 ;;; 프로그래밍 모드 - jinja2
 ;;;##############################################################
@@ -648,7 +651,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
