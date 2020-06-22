@@ -286,33 +286,34 @@
 ;;;##############################################################
 ;;; 프로그래밍 모드 - python
 ;;;##############################################################
-;;; ref : http://caisah.info/emacs-for-python/
 
-(add-hook 'python-mode-hook
-  (lambda ()
+(defun my-python-mode-hook ()
     (setq indent-tabs-mode nil)
     (setq default-tab-width 4)
     (setq python-indent-offset 4) 
-    (setq show-trailing-whitespace t)))
+    (setq show-trailing-whitespace t))
+(add-hook 'python-mode-hook #'my-python-mode-hook)
 
-;(setq jedi:environment-virtualenv
-;      (list "pyvenv-3.6" "--system-site-packages"))
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys t)
-(setq jedi:complete-on-dot t)
+(require 'lsp-python-ms)
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (python-mode-hook . lsp-deferred)
+  :config
+  ;(setq lsp-prefer-flymake nil)
+  (setq lsp-enable-snippet nil)
+  ;;; it will install a mspyls binary from MS server
+  (setq lsp-python-ms-auto-install-server t))
 
-;; ipython
-(setq
-  python-shell-interpreter "ipython"
-  python-shell-interpreter-args ""
-  python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-  python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-  python-shell-completion-setup-code
-    "from IPython.core.completerlib import module_completion"
-  python-shell-completion-module-string-code
-    "';'.join(module_completion('''%s'''))\n"
-  python-shell-completion-string-code
-    "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+(defun lsp-python-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
+
+;(use-package yasnippet
+;  :ensure t
+;  :commands yas-minor-mode
+;  :hook (go-mode-hook . yas-minor-mode))
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - jinja2
@@ -348,33 +349,7 @@
   (setq tab-width 4)
   (setq indent-tabs-mode t)
   (setq show-trailing-whitespace t))
-(add-hook 'go-mode-hook 'my-go-mode-hook)
-
-(eval-after-load 'speedbar
-  '(speedbar-add-supported-extension ".go"))
-
-;;;##############################################################
-;;; slime
-;;;##############################################################
-(require 'slime-autoloads)
-
-;; Set your lisp system and, optionally, some contribs
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
-(setq slime-contribs '(slime-fancy))
-
-;;;##############################################################
-;;; lsp
-;;;##############################################################
-
-(setq lsp-gopls-staticcheck t)
-(setq lsp-eldoc-render-all t)
-(setq lsp-gopls-complete-unimported t)
-(setq lsp-signature-render-documentation nil)
-(setq lsp-signature-auto-activate nil)
-
-;;;##############################################################
-;;; lsp - golang
-;;;##############################################################
+(add-hook 'go-mode-hook #'my-go-mode-hook)
 
 ;go get golang.org/x/tools/gopls@latest
 (use-package lsp-mode
@@ -393,8 +368,34 @@
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-;;Optional - provides fancier overlays.
+;(use-package yasnippet
+;  :ensure t
+;  :commands yas-minor-mode
+;  :hook (go-mode-hook . yas-minor-mode))
 
+(eval-after-load 'speedbar
+  '(speedbar-add-supported-extension ".go"))
+
+;;;##############################################################
+;;; slime
+;;;##############################################################
+(require 'slime-autoloads)
+
+;; Set your lisp system and, optionally, some contribs
+(setq inferior-lisp-program "/usr/local/bin/sbcl")
+(setq slime-contribs '(slime-fancy))
+
+;;;##############################################################
+;;; lsp
+;;;##############################################################
+
+(setq lsp-eldoc-render-all t)
+(setq lsp-gopls-staticcheck t)
+(setq lsp-gopls-complete-unimported t)
+(setq lsp-signature-render-documentation nil)
+(setq lsp-signature-auto-activate nil)
+
+;;Optional - provides fancier overlays.
 (use-package lsp-ui
   :requires lsp-mode flycheck
   :ensure t
@@ -435,13 +436,6 @@
   (setq company-transformers nil
         company-lsp-async t
         company-lsp-cache-candidates nil))
-
-;;Optional - provides snippet support.
-
-;(use-package yasnippet
-;  :ensure t
-;  :commands yas-minor-mode
-;  :hook (go-mode-hook . yas-minor-mode))
 
 ;;;##############################################################
 ;;; rainbow-delimiter
@@ -551,16 +545,16 @@
 ;(global-set-key (kbd "<M-right>") 'highlight-symbol-prev)
 (setq highlight-symbol-on-navigation-p t)
 
+(defun my-highlight-symbol-hook ()
+  ;(highlight-symbol-mode t)
+  (highlight-symbol-nav-mode t))
 (when window-system
   ;(setq highlight-symbol-idle-delay 0.5)
   (dolist (hook '(emacs-lisp-mode-hook lisp-interaction-mode-hook java-mode-hook
                    c-mode-common-hook python-mode-hook ruby-mode-hook html-mode-hook
                    go-mode-hook
                    sh-mode-hook Info-mode-hook))
-    (add-hook hook 
-      (lambda ()
-        ;(highlight-symbol-mode t)
-        (highlight-symbol-nav-mode t)))))
+    (add-hook hook #'my-highlight-symbol-hook)))
 
 ;;;##############################################################
 ;; window-move
