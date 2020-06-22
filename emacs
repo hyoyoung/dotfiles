@@ -121,7 +121,7 @@
   (add-to-list 'default-frame-alist `(height . ,my-frame-height))
   (add-to-list 'default-frame-alist `(width . ,my-frame-width)))
 (custom-set-frame-size)
-(add-hook 'before-make-frame-hook 'custom-set-frame-size)
+(add-hook 'before-make-frame-hook #'custom-set-frame-size)
 
 ;;;##############################################################
 ;;; font conf
@@ -254,7 +254,7 @@
 (setq font-lock-maximum-decoration t)
 
 ; enable color in console mode
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
 
 ;; Display line number on the left
 ;(global-linum-mode t)
@@ -281,7 +281,7 @@
 ;;;##############################################################
 
 (require 'flycheck)
-(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+(add-hook 'flycheck-mode-hook #'flycheck-color-mode-line-mode)
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - python
@@ -519,7 +519,7 @@
                                string ""))
             isearch-yank-flag t)
       (isearch-search-and-update))))
-(add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
+(add-hook 'isearch-mode-hook #'my-isearch-yank-word-hook)
 ;(global-set-key [f9] 'my-isearch-word-at-point)
 (global-set-key (kbd "C-*") 'my-isearch-word-at-point)
 
@@ -626,7 +626,9 @@ vi style of % jumping to matching brace."
 
 ;; auto save when lose input focus
 ;(add-hook 'focus-out-hook 'save-buffer)
-(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+(defun my-focus-out-hook ()
+  (save-some-buffers t))
+(add-hook 'focus-out-hook #'my-focus-out-hook)
 
 ;show empty lines
 ;(setq-default indicate-empty-lines t)
