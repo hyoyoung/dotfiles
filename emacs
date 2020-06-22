@@ -610,6 +610,36 @@ vi style of % jumping to matching brace."
 (global-set-key (kbd "C-^") 'top-join-line)
 
 ;;;##############################################################
+;;; projectile
+;;;##############################################################
+
+(require 'projectile)
+
+(setq projectile-enable-caching t
+      projectile-remember-window-configs t
+      projectile-indexing-method 'native
+      projectile-completion-system (quote ivy)
+      projectile-switch-project-action (quote projectile-dired)
+)
+
+(defun my-projectile-mode ()
+  (projectile-mode 1))
+(dolist (hook (list
+               'c-mode-hook
+               'lisp-mode-hook
+               'emacs-lisp-mode-hook
+               'lisp-interaction-mode-hook
+               'sh-mode-hook
+               'go-mode-hook
+               'python-mode-hook
+               'makefile-mode-hook
+               ))
+  (add-hook hook #'my-projectile-mode))
+
+;(setq projectile-globally-ignored-files '("TAGS" "GPATH" "GRTAGS" "GSYMS" "GTAGS"))
+;(setq projectile-globally-ignored-file-suffixes '("~")
+
+;;;##############################################################
 ;;; misc
 ;;;#############################################################
 (require 'tramp)
@@ -653,7 +683,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
