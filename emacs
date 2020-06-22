@@ -485,16 +485,16 @@
                      (- (frame-width) sr-speedbar-width)))
   (ad-enable-advice 'sr-speedbar-close 'after 'sr-speedbar-close-resize-frame))
 
-(add-hook 'speedbar-mode-hook' (lambda () (linum-mode -1)))
+;(add-hook 'speedbar-mode-hook' (lambda () (linum-mode -1)))
 
-(when window-system          ; start speedbar if we're using a window system
+;;; start speedbar if we're using a window system
+(when window-system
   (sr-speedbar-open))
 
 (when window-system
   (with-current-buffer sr-speedbar-buffer-name
-    (setq window-size-fixed 'width)))
-
-(setq cursor-in-non-selected-windows nil)
+    (setq window-size-fixed 'width)
+    (setq cursor-in-non-selected-windows nil)))
 
 ;;;##############################################################
 ;; search mode hook - like vim * search
