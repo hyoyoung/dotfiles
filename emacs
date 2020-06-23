@@ -180,6 +180,17 @@
 
 (eval-when-compile
   (require 'use-package))
+
+;;;##############################################################
+;;; installs packages
+;;;#############################################################
+
+(defvar my-packages
+  '(flycheck py-autopep8 blacken magit))
+(defun install-my-packages (package)
+  (unless (package-installed-p package)
+    (package-install package)))
+(mapc #'install-my-packages my-packages)
   
 ;;;##############################################################
 ;;; load site-lisp
@@ -199,9 +210,11 @@
 ;;;##############################################################
 ;;; global setting
 ;;;##############################################################
+(setq inhibit-startup-message t)
 (setq column-number-mode t)
 (display-time)
 (defalias 'yes-or-no-p 'y-or-n-p)       ; use y/n instead of yes/no
+
 (show-paren-mode t) ; turn on paren match highlighting
 ;(setq show-paren-style 'expression) ; highlight entire bracket expression
 (setq show-paren-style 'mixed) 
@@ -212,13 +225,12 @@
 ;; turn off word wrap
 ;(setq default-truncate-lines t)
 
-;(setq-default indent-tabs-mode nil)    ; prevent Extraneous Tabs
 (require 'icomplete)
 (icomplete-mode 1)                      ; incremental minibuffer completion
 (setq icomplete-in-buffer t)
 (auto-compression-mode t)               ; auto handling with zipped files
 
-;InteractivelyDoThings mode to auto complete in minibuffer
+;;;InteractivelyDoThings mode to auto complete in minibuffer
 (require 'ido)
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
@@ -255,6 +267,27 @@
 ;; autocomplete paired brackets
 (electric-pair-mode 1)
 ;(setq-default electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+
+(autoload 'zap-up-to-char "misc"
+  "Kill up to, but not including ARGth occurrence of CHAR." t)
+
+;; https://www.emacswiki.org/emacs/SavePlace
+(save-place-mode 1)
+
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
+
+(setq save-interprogram-paste-before-kill t
+      apropos-do-all t
+      mouse-yank-at-point t
+      require-final-newline t
+      load-prefer-newer t)
 
 ;;;##############################################################
 ;;; load theme
@@ -359,6 +392,8 @@
 ;;; 프로그래밍 모드 - python
 ;;;##############################################################
 
+(require 'py-autopep8)
+
 (defun my-python-mode-hook ()
     (setq indent-tabs-mode nil)
     (setq default-tab-width 4)
@@ -370,10 +405,13 @@
 (defun lsp-python-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  (add-hook 'before-save-hook #'py-autopep8-enable-on-save)
 (add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
 
 (require 'pyvenv)
 (pyvenv-activate "~/.emacs.d/venv3/")
+
+
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - jinja2
@@ -680,7 +718,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (ein magit elpy better-defaults py-autopep8 diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
