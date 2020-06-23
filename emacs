@@ -267,7 +267,17 @@
 ;;;##############################################################
 
 (require 'flycheck)
-(add-hook 'flycheck-mode-hook #'flycheck-color-mode-line-mode)
+(defun my-flycheck-mode-hook ()
+  (flycheck-color-mode-line-mode))
+  ; the default value was '(save idle-change new-line mode-enabled)
+  (setq flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch))
+  (setq flycheck-idle-change-delay 3.0)
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'my-flycheck-mode-hook))
+
+;;; hide some modes in mode-[line
+(eval-after-load "eldoc" '(diminish 'eldoc-mode))
+(eval-after-load "company" '(diminish 'company-mode))
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - lsp
@@ -300,33 +310,28 @@
   :requires lsp-mode flycheck
   :ensure t
   :commands lsp-ui-mode
-  :init
+  :init)
   :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-use-childframe t
-        lsp-ui-doc-position 'top
-        lsp-ui-doc-include-signature t
-        lsp-ui-sideline-enable nil
-        lsp-ui-flycheck-enable t
-        lsp-ui-flycheck-list-position 'right
-        lsp-ui-flycheck-live-reporting t
-        lsp-ui-imenu-enable t
-        lsp-ui-peek-enable t
-        lsp-ui-peek-list-width 60
-        lsp-ui-peek-peek-height 25))
+   (setq
+         lsp-modeline-code-actions-enable nil
+         lsp-ui-doc-position 'top
+         lsp-ui-doc-include-signature t
+         lsp-ui-doc-delay 0.5
+         lsp-ui-sideline-delay 0.5
+         lsp-ui-sideline-code-actions-prefix "💡 "
+         ;lsp-ui-sideline-diagnostic-max-lines 3
+         ;lsp-ui-sideline-ignore-duplicate t
+         ;lsp-ui-sideline-show-hover t
+   )
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - company
 ;;;##############################################################
 
-;;Company mode is a standard completion package that works well with lsp-mode.
-;;company-lsp integrates company mode completion with lsp-mode.
-;;completion-at-point also works out of the box but doesn't support snippets.
-
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0.3)
+  (setq company-idle-delay 0.5)
   (global-company-mode 1)
   (global-set-key (kbd "C-<tab>") 'company-complete))
 
@@ -385,6 +390,10 @@
 ;;;##############################################################
 (require 'go-mode)
     (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
+
+; go get github.com/golangci/golangci-lint/cmd/golangci-lint
+; # binary will be $(go env GOPATH)/bin/golangci-lint
+; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
 
 (defun my-go-mode-hook ()
   ; Customize compile command to run go build
@@ -671,7 +680,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
