@@ -99,8 +99,8 @@
       ;;;##############################################################
       (setq my-frame-x 20)
       (setq my-frame-y 20)
-      (setq my-frame-height 40)
-      (setq my-frame-width 135)
+      (setq my-frame-height 45)
+      (setq my-frame-width 150)
       (setq my-font-height 85)
 
       (my-linux-conf)
@@ -180,20 +180,6 @@
 
 (eval-when-compile
   (require 'use-package))
-  
-;;;##############################################################
-;;; package managers - el-get
-;;;##############################################################
-  
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (let (el-get-master-branch)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
-(el-get 'sync)
   
 ;;;##############################################################
 ;;; load site-lisp
@@ -284,36 +270,102 @@
 (add-hook 'flycheck-mode-hook #'flycheck-color-mode-line-mode)
 
 ;;;##############################################################
+;;; 프로그래밍 모드 - lsp
+;;;##############################################################
+
+(setq lsp-eldoc-render-all nil) ; show only functions' signature
+(setq lsp-signature-render-documentation nil)
+(setq lsp-signature-auto-activate nil)
+
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook
+    ((python-mode-hook . lsp-deferred)
+     (go-mode-hook . lsp-deferred))
+  :config
+  ;(setq lsp-prefer-flymake nil)
+  (setq lsp-enable-snippet nil)
+  (setq lsp-auto-guess-root t) ; lsp with projectile
+  ;(setq lsp-log-io nil)
+  (setq lsp-enable-folding nil)
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-enable-links nil)
+  (setq lsp-client-packages '(lsp-go lsp-pyls lsp-yaml))
+  (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
+  (setq lsp-restart 'auto-restart))
+
+;;Optional - provides fancier overlays.
+(use-package lsp-ui
+  :requires lsp-mode flycheck
+  :ensure t
+  :commands lsp-ui-mode
+  :init
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-use-childframe t
+        lsp-ui-doc-position 'top
+        lsp-ui-doc-include-signature t
+        lsp-ui-sideline-enable nil
+        lsp-ui-flycheck-enable t
+        lsp-ui-flycheck-list-position 'right
+        lsp-ui-flycheck-live-reporting t
+        lsp-ui-imenu-enable t
+        lsp-ui-peek-enable t
+        lsp-ui-peek-list-width 60
+        lsp-ui-peek-peek-height 25))
+
+;;;##############################################################
+;;; 프로그래밍 모드 - company
+;;;##############################################################
+
+;;Company mode is a standard completion package that works well with lsp-mode.
+;;company-lsp integrates company mode completion with lsp-mode.
+;;completion-at-point also works out of the box but doesn't support snippets.
+
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0.3)
+  (global-company-mode 1)
+  (global-set-key (kbd "C-<tab>") 'company-complete))
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp
+  :config
+  (push 'company-lsp company-backends)
+  (setq company-lsp-enable-snippet nil)
+  ;; Disable client-side cache because the LSP server does a better job.
+  (setq company-transformers nil
+        company-lsp-async t
+        company-lsp-cache-candidates nil))
+
+;;;##############################################################
+;;; 프로그래밍 모드 - yasnippet
+;;;##############################################################
+
+;(use-package yasnippet
+;  :ensure t
+;  :commands yas-minor-mode
+;  :hook (go-mode-hook . yas-minor-mode))
+
+;;;##############################################################
 ;;; 프로그래밍 모드 - python
 ;;;##############################################################
 
 (defun my-python-mode-hook ()
     (setq indent-tabs-mode nil)
     (setq default-tab-width 4)
-    (setq python-indent-offset 4) 
+    (setq python-indent-offset 4)
     (setq show-trailing-whitespace t))
 (add-hook 'python-mode-hook #'my-python-mode-hook)
 
-(require 'lsp-python-ms)
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :hook (python-mode-hook . lsp-deferred)
-  :config
-  ;(setq lsp-prefer-flymake nil)
-  (setq lsp-enable-snippet nil)
-  ;;; it will install a mspyls binary from MS server
-  (setq lsp-python-ms-auto-install-server t))
-
+; pip install python-language-server[all]
 (defun lsp-python-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
-
-;(use-package yasnippet
-;  :ensure t
-;  :commands yas-minor-mode
-;  :hook (go-mode-hook . yas-minor-mode))
 
 (require 'pyvenv)
 (pyvenv-activate "~/.emacs.d/venv3/")
@@ -352,29 +404,18 @@
   (setq tab-width 4)
   (setq indent-tabs-mode t)
   (setq show-trailing-whitespace t))
+  (setq lsp-gopls-staticcheck t)
+  (setq lsp-gopls-complete-unimported t)
 (add-hook 'go-mode-hook #'my-go-mode-hook)
 
-;go get golang.org/x/tools/gopls@latest
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :hook (go-mode-hook . lsp-deferred)
-  :config
-  ;(setq lsp-prefer-flymake nil)
-  (setq lsp-enable-snippet nil))
+;go get -u golang.org/x/tools/gopls
 
 ;;Set up before-save hooks to format buffer and add/delete imports.
 ;;Make sure you don't have other gofmt/goimports hooks enabled.
-
 (defun lsp-go-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-
-;(use-package yasnippet
-;  :ensure t
-;  :commands yas-minor-mode
-;  :hook (go-mode-hook . yas-minor-mode))
 
 (eval-after-load 'speedbar
   '(speedbar-add-supported-extension ".go"))
@@ -387,58 +428,6 @@
 ;; Set your lisp system and, optionally, some contribs
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
 (setq slime-contribs '(slime-fancy))
-
-;;;##############################################################
-;;; lsp
-;;;##############################################################
-
-(setq lsp-eldoc-render-all t)
-(setq lsp-gopls-staticcheck t)
-(setq lsp-gopls-complete-unimported t)
-(setq lsp-signature-render-documentation nil)
-(setq lsp-signature-auto-activate nil)
-
-;;Optional - provides fancier overlays.
-(use-package lsp-ui
-  :requires lsp-mode flycheck
-  :ensure t
-  :commands lsp-ui-mode
-  :init
-  :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-use-childframe t
-        lsp-ui-doc-position 'top
-        lsp-ui-doc-include-signature t
-        lsp-ui-sideline-enable nil
-        lsp-ui-flycheck-enable t
-        lsp-ui-flycheck-list-position 'right
-        lsp-ui-flycheck-live-reporting t
-        lsp-ui-imenu-enable t
-        lsp-ui-peek-enable t
-        lsp-ui-peek-list-width 60
-        lsp-ui-peek-peek-height 25))
-
-;;Company mode is a standard completion package that works well with lsp-mode.
-;;company-lsp integrates company mode completion with lsp-mode.
-;;completion-at-point also works out of the box but doesn't support snippets.
-
-(use-package company
-  :ensure t
-  :config
-  (setq company-idle-delay 0.3)
-  (global-company-mode 1)
-  (global-set-key (kbd "C-<tab>") 'company-complete))
-
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp
-  :config
-  (push 'company-lsp company-backends)
-  (setq company-lsp-enable-snippet nil)
-  ;; Disable client-side cache because the LSP server does a better job.
-  (setq company-transformers nil
-        company-lsp-async t
-        company-lsp-cache-candidates nil))
 
 ;;;##############################################################
 ;;; rainbow-delimiter
@@ -619,8 +608,7 @@ vi style of % jumping to matching brace."
       projectile-remember-window-configs t
       projectile-indexing-method 'native
       projectile-completion-system (quote ivy)
-      projectile-switch-project-action (quote projectile-dired)
-)
+      projectile-switch-project-action (quote projectile-dired))
 
 (defun my-projectile-mode ()
   (projectile-mode 1))
