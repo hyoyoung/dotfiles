@@ -289,6 +289,20 @@
       require-final-newline t
       load-prefer-newer t)
 
+;;;after emacs 27 it would be replaced with below
+;;;(require 'display-fill-column-indicator)
+(require 'fill-column-indicator)
+(setq fci-rule-width 1)
+(setq fci-rule-color "darkgray")
+(setq fci-rule-column 100)
+(define-globalized-minor-mode global-fci-mode fci-mode
+  (lambda ()
+    (if (and
+         (not (string-match "^\*.*\*$" (buffer-name)))
+         (not (eq major-mode 'dired-mode)))
+        (fci-mode 1))))
+(global-fci-mode 1)
+
 ;;;##############################################################
 ;;; load theme
 ;;;#############################################################
@@ -715,7 +729,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (magit py-autopep8 diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (fill-column-indicator magit py-autopep8 diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx lsp-python-ms highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
