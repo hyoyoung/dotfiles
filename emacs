@@ -291,31 +291,37 @@
 
 ;;;after emacs 27 it would be replaced with below
 ;;;(require 'display-fill-column-indicator)
-(require 'fill-column-indicator)
-(setq fci-rule-width 1)
-(setq fci-rule-color "darkgray")
-(setq fci-rule-column 100)
-(define-globalized-minor-mode global-fci-mode fci-mode
-  (lambda ()
-    (if (and
-         (not (string-match "^\*.*\*$" (buffer-name)))
-         (not (eq major-mode 'dired-mode)))
-        (fci-mode 1))))
-(global-fci-mode 1)
-(defvar-local company-fci-mode-on-p nil)
+(if (version< emacs-version "27.0")
+  (progn
+    (require 'fill-column-indicator)
+    (setq fci-rule-width 1)
+    (setq fci-rule-color "darkgray")
+    (setq fci-rule-column 100)
+    (define-globalized-minor-mode global-fci-mode fci-mode
+      (lambda ()
+        (if (and
+             (not (string-match "^\*.*\*$" (buffer-name)))
+             (not (eq major-mode 'dired-mode)))
+            (fci-mode 1))))
+    (global-fci-mode 1)
+    (defvar-local company-fci-mode-on-p nil)
+    ; workaround fci-mode bug with company popup
+    (defun company-turn-off-fci (&rest ignore)
+      (when (boundp 'fci-mode)
+        (setq company-fci-mode-on-p fci-mode)
+        (when fci-mode (fci-mode -1))))
+    (defun company-maybe-turn-on-fci (&rest ignore)
+      (when company-fci-mode-on-p (fci-mode 1)))
+    (add-hook 'company-completion-started-hook 'company-turn-off-fci)
+    (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
+    (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
+  (progn
+    (require 'display-fill-column-indicator)
+    (global-display-fill-column-indicator-mode)
+    (setq display-fill-column-indicator-column 100)
+  )
+)
 
-; workaround fci-mode bug with company popup
-(defun company-turn-off-fci (&rest ignore)
-  (when (boundp 'fci-mode)
-    (setq company-fci-mode-on-p fci-mode)
-    (when fci-mode (fci-mode -1))))
-
-(defun company-maybe-turn-on-fci (&rest ignore)
-  (when company-fci-mode-on-p (fci-mode 1)))
-
-(add-hook 'company-completion-started-hook 'company-turn-off-fci)
-(add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-(add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
 
 ;;;##############################################################
 ;;; load theme
