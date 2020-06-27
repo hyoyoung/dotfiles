@@ -429,13 +429,26 @@
     (setq indent-tabs-mode nil)
     (setq default-tab-width 4)
     (setq python-indent-offset 4)
-    (setq show-trailing-whitespace t))
+    (setq show-trailing-whitespace t)
+    (pyvenv-mode 1)
+    (pyvenv-tracking-mode 1))
 (add-hook 'python-mode-hook #'my-python-mode-hook)
 
 (require 'pyvenv)
-(setq venv-location (expand-file-name "~/.emacs.d/venv/"))
-(pyvenv-activate venv-location)
+(setq my-venv-location (expand-file-name "~/.emacs.d/venv/"))
+(pyvenv-activate my-venv-location)
 (add-hook 'python-mode-hook #'pyvenv-mode)
+
+(defun my-focus-in-venv-change-hook ()
+  (hack-local-variables)
+  (if (boundp 'project-venv-path)
+    (progn
+      (message "Activating %s" project-venv-path)
+      (pyvenv-activate project-venv-path))
+    (progn (message "Change to default venv")
+      (pyvenv-activate my-venv-location))))
+; after emacs 27.1 will use it, window-buffer-change-functions
+(add-hook 'focus-in-hook #'my-focus-in-venv-change-hook)
 
 (require 'py-autopep8)
 (setq py-autopep8-options '("--max-line-length=100"))
