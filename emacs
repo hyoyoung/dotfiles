@@ -283,6 +283,8 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
+(global-unset-key (kbd "C-x f")) ; set fill column
+
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
       mouse-yank-at-point t
