@@ -359,7 +359,7 @@
   :commands (lsp lsp-deferred)
   :hook
     ((python-mode-hook . lsp-deferred)
-     (go-mode-hook . lsp-deferred))
+      (go-mode-hook . lsp-deferred))
   :config
   ;(setq lsp-prefer-flymake nil)
   (setq lsp-enable-snippet nil)
@@ -368,7 +368,7 @@
   (setq lsp-enable-folding nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-enable-links nil)
-  (setq lsp-client-packages '(lsp-go lsp-pyls lsp-yaml))
+  ;(setq lsp-client-packages '(lsp-go lsp-pyls lsp-yaml))
   (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
   (setq lsp-restart 'auto-restart)
   (lsp-register-custom-settings
@@ -408,19 +408,6 @@
   (global-company-mode 1)
   (global-set-key (kbd "C-<tab>") 'company-complete))
 
-; company-lsp disconnected with company. will it be used?
-;(use-package company-lsp
-;  :ensure t
-;  :commands company-lsp
-;  :config
-;  (push 'company-lsp company-backends)
-;  (setq company-lsp-enable-snippet nil)
-;  ;; Disable client-side cache because the LSP server does a better job.
-;  ;;      company-lsp-cache-candidates nil))
-;  (setq company-transformers nil
-;        company-lsp-async t
-;        company-lsp-cache-candidates 'auto))
-
 ;;;##############################################################
 ;;; 프로그래밍 모드 - yasnippet
 ;;;##############################################################
@@ -434,35 +421,9 @@
 ;;; 프로그래밍 모드 - python
 ;;;##############################################################
 
-;(unless (eq emacs-major-version 27)
-;  (elpy-enable))
-;(defun lsp-python-install-packages ()
-;  "Install required Python packages for lsp."
-;  (interactive)
-;  (if 'pyvenv-virtual-env
-;      (async-shell-command "pip install -U python-language-server")
-;    (message "No active virtualenv.")))
-;
-;(defun elpy-install-packages ()
-;  "Install required Python packages for elpy."
-;  (interactive)
-;  (if pyvenv-virtual-env
-;      (async-shell-command "pip install jedi flake8 autopep8 yapf")
-;    (message "No active virtualenv.")))
-;
-;(add-hook 'focus-in-hook (lambda ()
-;                           (hack-local-variables)
-;                           (if (boundp 'project-venv-name)
-;                           (progn
-;                             (message "Activating %s" project-venv-name)
-;                             (pyvenv-workon project-venv-name))
-;                           (progn (message "Deactivating")
-;                                  (pyvenv-deactivate)))))
-; You can specify a virtual environment on a per-project basis by a .dir-locals.el file for your project.
-;   ((python-mode . ((pyvenv-activate . "~/.virtualenvs/default")
-;   		 (subdirs . nil))))
-
-(require 'py-autopep8)
+;;; example of .dir-locals.el
+;;; ((python-mode . ((lsp-pyls-server-command . ("/home/user/some/venv/bin/pyls"))))
+;;; (python-mode . ((pyvenv-activate . "~/some/venv") (subdirs . nil))))
 
 (defun my-python-mode-hook ()
     (setq indent-tabs-mode nil)
@@ -470,30 +431,26 @@
     (setq python-indent-offset 4)
     (setq show-trailing-whitespace t))
 (add-hook 'python-mode-hook #'my-python-mode-hook)
-(add-hook 'python-mode-hook #'pyvenv-mode)
-
-; pip install python-language-server[all]
-; pip install pyls-mypy pyls-black pyls-isort
-(defun lsp-python-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t))
-  ;(add-hook 'before-save-hook #'lsp-organize-imports t t)
-(add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
-
-;(setq lsp-pyls-plugins-pycodestyle-max-line-length 100)
-;;(setq lsp-pyls-plugins-pycodestyle-ignore '("E501")) ; long line warning
 
 (require 'pyvenv)
 (setq venv-location (expand-file-name "~/.emacs.d/venv/"))
 (pyvenv-activate venv-location)
+(add-hook 'python-mode-hook #'pyvenv-mode)
 
-;(elpy-enable)
-;(setq elpy-rpc-backend "jedi")
-;(setq elpy-rpc-virtualenv-path 'current)
-;(when (require 'flycheck nil t)
-;  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-;  (add-hook 'elpy-mode-hook 'flycheck-mode))
-;(require 'py-autopep8)
-;(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+(require 'py-autopep8)
+(setq py-autopep8-options '("--max-line-length=100"))
+(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+
+; pip install python-language-server[all]
+; pip install pyls-mypy pyls-black pyls-isort
+;(defun lsp-python-install-save-hooks ()
+;  (add-hook 'before-save-hook #'lsp-format-buffer t t))
+;  ;(add-hook 'before-save-hook #'lsp-organize-imports t t)
+;(add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
+
+(setq lsp-pyls-plugins-pycodestyle-max-line-length 100)
+;(setq lsp-pyls-plugins-pycodestyle-ignore '("E501")) ; long line warning
+
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - jinja2
@@ -803,7 +760,7 @@ vi style of % jumping to matching brace."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (lsp-python-ms elpy fill-column-indicator magit py-autopep8 diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+    (elpy fill-column-indicator magit py-autopep8 diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
