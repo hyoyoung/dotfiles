@@ -422,8 +422,12 @@
 ;;;##############################################################
 
 ;;; example of .dir-locals.el
-;;; ((python-mode . ((lsp-pyls-server-command . ("/home/user/some/venv/bin/pyls"))))
-;;; (python-mode . ((pyvenv-activate . "~/some/venv") (subdirs . nil))))
+;;; (
+;;;   (python-mode . ((project-venv-path . "~/envs/some_env")))
+;;;   (python-mode . ((lsp-pyls-server-command . ("/home/user/envs/some_env/bin/pyls"))))
+;;;   (python-mode . ((pyvenv-activate . "~/envs/some_env")
+;;;                 (subdirs . nil)))
+;;; )
 
 (defun my-python-mode-hook ()
     (setq indent-tabs-mode nil)
