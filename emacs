@@ -434,6 +434,7 @@
     (setq default-tab-width 4)
     (setq python-indent-offset 4)
     (setq show-trailing-whitespace t)
+    (setenv "WORKON_HOME" "~/local/anaconda3/envs") ; to use conda
     (pyvenv-mode 1)
     (pyvenv-tracking-mode 1))
 (add-hook 'python-mode-hook #'my-python-mode-hook)
