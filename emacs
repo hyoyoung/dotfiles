@@ -344,7 +344,7 @@
 (eval-after-load 'flycheck
   '(add-hook 'flycheck-mode-hook #'my-flycheck-mode-hook))
 
-;;; hide some modes in mode-[line
+;;; hide some modes in mode-line
 (eval-after-load "eldoc" '(diminish 'eldoc-mode))
 (eval-after-load "company" '(diminish 'company-mode))
 
