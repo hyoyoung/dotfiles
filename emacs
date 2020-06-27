@@ -8,7 +8,7 @@
   
   (if (eq window-system 'x)
     (progn
-      (set-default-font "Bitstream Vera Sans Mono:style=Roman")
+      (set-frame-font "Bitstream Vera Sans Mono:style=Roman")
       (set-fontset-font "fontset-default" '(#x1100 . #xffdc)
         '("NanumGothic" . "unicode-bmp")) ;;; 유니코드 한글영역
       (set-fontset-font "fontset-default" '(#xe0bc . #xf66e)
@@ -318,7 +318,7 @@
   (progn
     (require 'display-fill-column-indicator)
     (global-display-fill-column-indicator-mode)
-    (setq display-fill-column-indicator-column 100)
+    (setq-default fill-column 100)
   )
 )
 
@@ -439,20 +439,24 @@
 (add-hook 'python-mode-hook #'my-python-mode-hook)
 
 (require 'pyvenv)
-(setq my-venv-location (expand-file-name "~/.emacs.d/venv/"))
-(pyvenv-activate my-venv-location)
+(setq my-default-venv-path (expand-file-name "~/.emacs.d/venv/"))
+;(pyvenv-activate my-default-venv-path)
 (add-hook 'python-mode-hook #'pyvenv-mode)
 
-(defun my-focus-in-venv-change-hook ()
+(defun my-venv-with-window-buffer-change (newframe)
   (hack-local-variables)
   (if (boundp 'project-venv-path)
-    (progn
-      (message "Activating %s" project-venv-path)
-      (pyvenv-activate project-venv-path))
-    (progn (message "Change to default venv")
-      (pyvenv-activate my-venv-location))))
-; after emacs 27.1 will use it, window-buffer-change-functions
-(add-hook 'focus-in-hook #'my-focus-in-venv-change-hook)
+    (if (not (string-equal pyvenv-virtual-env project-venv-path))
+      (progn
+        (message "Activating %s" project-venv-path)
+        (pyvenv-activate project-venv-path)))
+    (if (not (string-equal pyvenv-virtual-env my-default-venv-path))
+      (progn
+        (message "Change to default venv")
+        (pyvenv-activate my-default-venv-path)))))
+; after emacs 27.1
+(if (not (version< emacs-version "27.0"))
+  (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
 
 (require 'py-autopep8)
 (setq py-autopep8-options '("--max-line-length=100"))
