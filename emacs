@@ -293,6 +293,7 @@
 (global-unset-key (kbd "C-x C-z")) ; don't suspend
 (global-unset-key (kbd "C-x z")) ; don't repeat
 (global-unset-key (kbd "C-x f")) ; don't set fill column
+(global-unset-key [mode-line mouse-3]) ; don't remove other windows
 
 ;;; clean up the mode line
 (require 'minions)
@@ -300,6 +301,9 @@
 (minions-mode 1)
 (setq minions-direct '(projectile-mode flycheck-mode))
 
+;(require 'doom-modeline)
+;(doom-modeline-mode 1)
+;(mood-line-mode)
 
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
@@ -307,34 +311,16 @@
       require-final-newline t
       load-prefer-newer t)
 
-;;;after emacs 27 it would be replaced with below
-;;;(require 'display-fill-column-indicator)
-(if (version< emacs-version "27.0")
+(if (version<= "27.0" emacs-version)
   (progn
-    (require 'fill-column-indicator)
-    (setq fci-rule-width 1)
-    (setq fci-rule-color "darkgray")
-    (setq fci-rule-column 100)
-    (define-globalized-minor-mode global-fci-mode fci-mode
+    (require 'display-fill-column-indicator)
+    (define-globalized-minor-mode global-display-fill-column-indicator-mode
+      display-fill-column-indicator-mode
       (lambda ()
         (if (and
              (not (string-match "^\*.*\*$" (buffer-name)))
              (not (eq major-mode 'dired-mode)))
-            (fci-mode 1))))
-    (global-fci-mode 1)
-    (defvar-local company-fci-mode-on-p nil)
-    ; workaround fci-mode bug with company popup
-    (defun company-turn-off-fci (&rest ignore)
-      (when (boundp 'fci-mode)
-        (setq company-fci-mode-on-p fci-mode)
-        (when fci-mode (fci-mode -1))))
-    (defun company-maybe-turn-on-fci (&rest ignore)
-      (when company-fci-mode-on-p (fci-mode 1)))
-    (add-hook 'company-completion-started-hook 'company-turn-off-fci)
-    (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-    (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
-  (progn
-    (require 'display-fill-column-indicator)
+            (display-fill-column-indicator-mode 1))))
     (global-display-fill-column-indicator-mode)
     (setq-default fill-column 100)
   )
@@ -455,39 +441,35 @@
 
 (require 'pyvenv)
 (setq my-default-venv-path (expand-file-name "~/.emacs.d/venv/"))
-;(pyvenv-activate my-default-venv-path)
+(pyvenv-activate my-default-venv-path)
 (add-hook 'python-mode-hook #'pyvenv-mode)
 
 (defun my-venv-with-window-buffer-change (newframe)
   (if (eq major-mode 'python-mode)
     (progn
-      (hack-local-variables)
       (if (boundp 'project-venv-path)
         (if (not (string-equal pyvenv-virtual-env project-venv-path))
           (progn
-            (message "Activating %s" project-venv-path)
+            (message "Activating %s." project-venv-path)
+            (hack-local-variables)
             (pyvenv-activate project-venv-path)))
         (if (not (string-equal pyvenv-virtual-env my-default-venv-path))
           (progn
-            (message "Change to default venv")
+            (message "Change to default venv.")
+            (hack-local-variables)
             (pyvenv-activate my-default-venv-path)))))))
 ; after emacs 27.1
-(if (not (version< emacs-version "27.0"))
+(if (version<= "27.0" emacs-version)
   (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
-
-(require 'py-autopep8)
-(setq py-autopep8-options '("--max-line-length=100"))
-(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ; pip install python-language-server[all]
 ; pip install pyls-mypy pyls-black pyls-isort
-;(defun lsp-python-install-save-hooks ()
-;  (add-hook 'before-save-hook #'lsp-format-buffer t t))
-;  ;(add-hook 'before-save-hook #'lsp-organize-imports t t)
-;(add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
+(defun lsp-python-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t))
+(add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
 
 (setq lsp-pyls-plugins-pycodestyle-max-line-length 100)
-;(setq lsp-pyls-plugins-pycodestyle-ignore '("E501")) ; long line warning
+(setq lsp-pyls-plugins-pycodestyle-ignore '("E501")) ; long line warning
 
 
 ;;;##############################################################
