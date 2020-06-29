@@ -255,8 +255,19 @@
 (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
 
 ;; Display line number on the left
-(global-display-line-numbers-mode)
-(setq display-line-numbers-width-start 3)
+(if (version<= "27.0" emacs-version)
+  (progn
+    (require 'display-line-numbers)
+    (define-globalized-minor-mode global-display-line-numbers-mode
+      display-line-numbers-mode
+      (lambda ()
+        (if (and
+             (not (string-match "^\*.*\*$" (buffer-name)))
+             (not (eq major-mode 'dired-mode)))
+            (display-line-numbers-mode 1))))
+    (global-display-line-numbers-mode)
+    (setq-default display-line-numbers-grow-only t)
+    (setq-default display-line-numbers-width 3)))
 
 ;;; focus to the main buffer
 (setq initial-buffer-choice t)
@@ -301,9 +312,7 @@
 (minions-mode 1)
 (setq minions-direct '(projectile-mode flycheck-mode))
 
-;(require 'doom-modeline)
-;(doom-modeline-mode 1)
-;(mood-line-mode)
+(mood-line-mode)
 
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
@@ -322,9 +331,7 @@
              (not (eq major-mode 'dired-mode)))
             (display-fill-column-indicator-mode 1))))
     (global-display-fill-column-indicator-mode)
-    (setq-default fill-column 100)
-  )
-)
+    (setq-default fill-column 100)))
 
 
 ;;;##############################################################
@@ -579,11 +586,6 @@
     (set-frame-width (selected-frame)
                      (- (frame-width) sr-speedbar-width)))
   (ad-enable-advice 'sr-speedbar-close 'after 'sr-speedbar-close-resize-frame))
-
-(defun my-speedbar-mode-hook ()
-  (display-line-numbers-mode -1))
-(add-hook 'speedbar-mode-hook #'my-speedbar-mode-hook)
-
 
 ;;; start speedbar if we're using a window system
 (when window-system

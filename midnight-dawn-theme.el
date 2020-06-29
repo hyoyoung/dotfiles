@@ -86,6 +86,9 @@
  '(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
  '(company-tooltip-annotation ((t (:foreground "gray31" :weight bold))))
 
+ '(line-number ((t (:foreground "grey60" :height 0.7))))
+ '(line-number-current-line ((t (:foreground "grey60" :height 0.7))))
+
 )
 
 ;;;###autoload
