@@ -255,10 +255,10 @@
 (add-hook 'shell-mode-hook #'ansi-color-for-comint-mode-on)
 
 ;; Display line number on the left
-;(global-linum-mode t)
-;;(set-face-attribute 'linum nil :background "#222")
-;(setq linum-format "%4d\u2502")
+(global-display-line-numbers-mode)
+(setq display-line-numbers-width-start 3)
 
+;;; focus to the main buffer
 (setq initial-buffer-choice t)
 
 ; for mule
@@ -283,7 +283,23 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
+(global-set-key (kbd "<home>") 'move-beginning-of-line)
+(global-set-key (kbd "<end>") 'move-end-of-line)
+
+; unset unused keys
 (global-unset-key (kbd "C-x f")) ; set fill column
+(global-unset-key (kbd "C-x C-n")) ; set-goal-column
+(when window-system (global-unset-key (kbd "C-z"))) ; don't minize
+(global-unset-key (kbd "C-x C-z")) ; don't suspend
+(global-unset-key (kbd "C-x z")) ; don't repeat
+(global-unset-key (kbd "C-x f")) ; don't set fill column
+
+;;; clean up the mode line
+(require 'minions)
+(setq minions-mode-line-lighter "☰")
+(minions-mode 1)
+(setq minions-direct '(projectile-mode flycheck-mode))
+
 
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
@@ -343,10 +359,6 @@
   (setq flycheck-idle-change-delay 3.0)
 (eval-after-load 'flycheck
   '(add-hook 'flycheck-mode-hook #'my-flycheck-mode-hook))
-
-;;; hide some modes in mode-line
-(eval-after-load "eldoc" '(diminish 'eldoc-mode))
-(eval-after-load "company" '(diminish 'company-mode))
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - lsp
@@ -447,16 +459,18 @@
 (add-hook 'python-mode-hook #'pyvenv-mode)
 
 (defun my-venv-with-window-buffer-change (newframe)
-  (hack-local-variables)
-  (if (boundp 'project-venv-path)
-    (if (not (string-equal pyvenv-virtual-env project-venv-path))
-      (progn
-        (message "Activating %s" project-venv-path)
-        (pyvenv-activate project-venv-path)))
-    (if (not (string-equal pyvenv-virtual-env my-default-venv-path))
-      (progn
-        (message "Change to default venv")
-        (pyvenv-activate my-default-venv-path)))))
+  (if (eq major-mode 'python-mode)
+    (progn
+      (hack-local-variables)
+      (if (boundp 'project-venv-path)
+        (if (not (string-equal pyvenv-virtual-env project-venv-path))
+          (progn
+            (message "Activating %s" project-venv-path)
+            (pyvenv-activate project-venv-path)))
+        (if (not (string-equal pyvenv-virtual-env my-default-venv-path))
+          (progn
+            (message "Change to default venv")
+            (pyvenv-activate my-default-venv-path)))))))
 ; after emacs 27.1
 (if (not (version< emacs-version "27.0"))
   (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
@@ -584,7 +598,10 @@
                      (- (frame-width) sr-speedbar-width)))
   (ad-enable-advice 'sr-speedbar-close 'after 'sr-speedbar-close-resize-frame))
 
-;(add-hook 'speedbar-mode-hook' (lambda () (linum-mode -1)))
+(defun my-speedbar-mode-hook ()
+  (display-line-numbers-mode -1))
+(add-hook 'speedbar-mode-hook #'my-speedbar-mode-hook)
+
 
 ;;; start speedbar if we're using a window system
 (when window-system
@@ -722,7 +739,7 @@ vi style of % jumping to matching brace."
 
 (defun my-projectile-mode ()
   (projectile-mode 1))
-(dolist (hook (list
+(dolist (target-hook (list
                'c-mode-hook
                'lisp-mode-hook
                'emacs-lisp-mode-hook
@@ -732,7 +749,7 @@ vi style of % jumping to matching brace."
                'python-mode-hook
                'makefile-mode-hook
                ))
-  (add-hook hook #'my-projectile-mode))
+  (add-hook target-hook #'my-projectile-mode))
 
 ;(setq projectile-globally-ignored-files '("TAGS" "GPATH" "GRTAGS" "GSYMS" "GTAGS"))
 ;(setq projectile-globally-ignored-file-suffixes '("~")
@@ -748,12 +765,6 @@ vi style of % jumping to matching brace."
 ;(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 ;(setq tramp-debug-buffer t)
 ;(setq tramp-verbose 10)
-
-; unset unused keys
-(global-unset-key "\C-x\C-n") ; set-goal-column
-(when window-system (global-unset-key "\C-z")) ; don't minize
-(global-unset-key "\C-x\C-z") ; don't suspend
-;(global-unset-key "\C-xz") ; don't repeat
 
 ;; auto save when lose input focus
 ;(add-hook 'focus-out-hook 'save-buffer)
@@ -783,8 +794,7 @@ vi style of % jumping to matching brace."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (elpy fill-column-indicator magit py-autopep8 diminish go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f))))
+   '(doom-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
