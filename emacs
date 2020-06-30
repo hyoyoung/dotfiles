@@ -8,13 +8,10 @@
   
   (if (eq window-system 'x)
     (progn
-      (set-frame-font "Bitstream Vera Sans Mono:style=Roman")
-      (set-fontset-font "fontset-default" '(#x1100 . #xffdc)
-        '("NanumGothic" . "unicode-bmp")) ;;; 유니코드 한글영역
-      (set-fontset-font "fontset-default" '(#xe0bc . #xf66e)
-        '("NanumGothic" . "unicode-bmp")) ;;; 유니코드 한글영역
-      (set-fontset-font "fontset-default" 'han
-        '("Bitstream Vera Sans Mono:style=Roman" . "unicode-bmp"))
+      (set-face-attribute 'default nil :family "Bitstream Vera Sans Mono")
+      (set-fontset-font t 'hangul
+                  (font-spec :name "D2Coding"))
+      (setq face-font-rescale-alist '(("D2Coding" . 1.23)))
       
       (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "x-www-browser")
@@ -29,11 +26,6 @@
       
       (global-set-key [(Hangul)] 'toggle-input-method)
       (global-set-key [(Hangul_Hanja)] 'hangul-to-hanja-conversion)
-
-      (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-      (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-      (global-set-key (kbd "S-C-<down>") 'shrink-window)
-      (global-set-key (kbd "S-C-<up>") 'enlarge-window)
     )
   )
   (setenv "GOPATH" "/home/hyoyoung/local/go")
@@ -285,6 +277,11 @@
 ;; https://www.emacswiki.org/emacs/SavePlace
 (save-place-mode 1)
 
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
@@ -306,13 +303,17 @@
 (global-unset-key (kbd "C-x f")) ; don't set fill column
 (global-unset-key [mode-line mouse-3]) ; don't remove other windows
 
+;;; the mood line
+(mood-line-mode)
+
 ;;; clean up the mode line
 (require 'minions)
 (setq minions-mode-line-lighter "☰")
 (minions-mode 1)
-(setq minions-direct '(projectile-mode flycheck-mode))
+(if (bound-and-true-p mood-line-mode)
+  (setq minions-direct '(projectile-mode))
+  (setq minions-direct '(projectile-mode flycheck-mode)))
 
-(mood-line-mode)
 
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
