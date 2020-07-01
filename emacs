@@ -8,7 +8,7 @@
   
   (if (eq window-system 'x)
     (progn
-      (set-face-attribute 'default nil :family "Bitstream Vera Sans Mono")
+      (set-face-attribute 'default nil :family "Hack")
       (set-fontset-font t 'hangul
                   (font-spec :name "D2Coding"))
       ;(setq face-font-rescale-alist '(("D2Coding" . 1.23)))
