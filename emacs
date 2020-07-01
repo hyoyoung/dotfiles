@@ -11,7 +11,7 @@
       (set-face-attribute 'default nil :family "Bitstream Vera Sans Mono")
       (set-fontset-font t 'hangul
                   (font-spec :name "D2Coding"))
-      (setq face-font-rescale-alist '(("D2Coding" . 1.23)))
+      ;(setq face-font-rescale-alist '(("D2Coding" . 1.23)))
       
       (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "x-www-browser")
@@ -39,6 +39,7 @@
   ;;;##############################################################
   ;;; mac default settings
   ;;;##############################################################
+  ;(setq face-font-rescale-alist '((".*Apple SD Gothic Neo.*" . 1.35))
   ;; To enable sRGB
   (setq ns-use-srgb-colorspace t)
   
@@ -779,7 +780,7 @@ vi style of % jumping to matching brace."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(doom-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company company-lsp lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
+   '(simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
