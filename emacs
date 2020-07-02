@@ -39,6 +39,7 @@
   ;;;##############################################################
   ;;; mac default settings
   ;;;##############################################################
+  (set-face-attribute 'default nil :family "Menlo")
   ;(setq face-font-rescale-alist '((".*Apple SD Gothic Neo.*" . 1.35))
   ;; To enable sRGB
   (setq ns-use-srgb-colorspace t)
@@ -78,8 +79,8 @@
 (cond
   ((string-equal system-type "darwin")   ; Mac OS X
     (progn
-      (setq my-frame-height 45)
-      (setq my-frame-width 180)
+      (setq my-frame-height 50)
+      (setq my-frame-width 160)
       (setq my-font-height 140)
 
       (my-darwin-conf)
@@ -305,15 +306,19 @@
 (global-unset-key [mode-line mouse-3]) ; don't remove other windows
 
 ;;; the mood line
-(mood-line-mode)
+;(mood-line-mode)
 
 ;;; clean up the mode line
 (require 'minions)
 (setq minions-mode-line-lighter "☰")
 (minions-mode 1)
-(if (bound-and-true-p mood-line-mode)
-  (setq minions-direct '(projectile-mode))
-  (setq minions-direct '(projectile-mode flycheck-mode)))
+;(if (bound-and-true-p mood-line-mode)
+;  (setq minions-direct '(projectile-mode))
+;  (setq minions-direct '(projectile-mode flycheck-mode)))
+(setq minions-direct '(projectile-mode flycheck-mode))
+
+(require 'simple-modeline)
+(simple-modeline-mode)
 
 
 (setq save-interprogram-paste-before-kill t
@@ -450,7 +455,7 @@
 
 (require 'pyvenv)
 (setq my-default-venv-path (expand-file-name "~/.emacs.d/venv/"))
-(pyvenv-activate my-default-venv-path)
+;(pyvenv-activate my-default-venv-path)
 (add-hook 'python-mode-hook #'pyvenv-mode)
 
 (defun my-venv-with-window-buffer-change (newframe)
@@ -478,7 +483,7 @@
 (add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
 
 (setq lsp-pyls-plugins-pycodestyle-max-line-length 100)
-(setq lsp-pyls-plugins-pycodestyle-ignore '("E501")) ; long line warning
+;(setq lsp-pyls-plugins-pycodestyle-ignore '("E501")) ; long line warning
 
 
 ;;;##############################################################
@@ -726,14 +731,7 @@ vi style of % jumping to matching brace."
 (defun my-projectile-mode ()
   (projectile-mode 1))
 (dolist (target-hook (list
-               'c-mode-hook
-               'lisp-mode-hook
-               'emacs-lisp-mode-hook
-               'lisp-interaction-mode-hook
-               'sh-mode-hook
-               'go-mode-hook
-               'python-mode-hook
-               'makefile-mode-hook
+               'prog-mode-hook
                ))
   (add-hook target-hook #'my-projectile-mode))
 
