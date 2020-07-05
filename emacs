@@ -778,7 +778,7 @@ vi style of % jumping to matching brace."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
+   '(web-mode blacken exec-path-from-shell minions simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
