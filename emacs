@@ -382,7 +382,7 @@
   (setq lsp-enable-folding nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-enable-links nil)
-  ;(setq lsp-client-packages '(lsp-go lsp-pyls lsp-yaml))
+  (setq lsp-client-packages '(lsp-pyls lsp-go))
   (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
   (setq lsp-restart 'auto-restart)
   (lsp-register-custom-settings
@@ -447,16 +447,16 @@
     (setq indent-tabs-mode nil)
     (setq default-tab-width 4)
     (setq python-indent-offset 4)
+    (setq python-indent-guess-indent-offset-verbose nil)
     (setq show-trailing-whitespace t)
+    (setq my-default-venv-path (expand-file-name "~/.emacs.d/venv/"))
+    (pyvenv-activate my-default-venv-path)
     (setenv "WORKON_HOME" "~/local/anaconda3/envs") ; to use conda
     (pyvenv-mode 1)
     (pyvenv-tracking-mode 1))
 (add-hook 'python-mode-hook #'my-python-mode-hook)
 
 (require 'pyvenv)
-(setq my-default-venv-path (expand-file-name "~/.emacs.d/venv/"))
-;(pyvenv-activate my-default-venv-path)
-(add-hook 'python-mode-hook #'pyvenv-mode)
 
 (defun my-venv-with-window-buffer-change (newframe)
   (if (eq major-mode 'python-mode)
