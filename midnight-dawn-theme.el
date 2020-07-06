@@ -89,6 +89,11 @@
  '(line-number ((t (:foreground "grey60" :height 0.7))))
  '(line-number-current-line ((t (:foreground "grey60" :height 0.7))))
 
+ '(neo-file-link-face((t (:inherit default))))
+ '(neo-button-face((t (:inherit default))))
+ '(neo-expand-btn-face((t (:inherit font-lock-keyword-face))))
+ '(neo-dir-link-face((t (:inherit font-lock-keyword-face))))
+ '(neo-root-dir-face((t (:inherit font-lock-builtin-face))))
 )
 
 ;;;###autoload

@@ -45,13 +45,21 @@
   (setq ns-use-srgb-colorspace t)
   
   ;; key bindings
-  ;(setq mac-option-modifier 'super)
-  ;(setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'meta)
   (define-key global-map [home] 'beginning-of-line)
   (define-key global-map [end] 'end-of-line)
   (define-key global-map [help] 'overwrite-mode)
   (define-key global-map [S-help] 'clipboard-yank)
+
+  (defun copy-from-osx ()
+    (shell-command-to-string "pbpaste"))
+  (defun paste-to-osx (text &optional push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+        (process-send-string proc text)
+        (process-send-eof proc))))
+  (setq interprogram-cut-function 'paste-to-osx)
+  (setq interprogram-paste-function 'copy-from-osx)
 
   ; unset unused keys
   (global-unset-key (kbd "S-SPC")) ; switch input method
@@ -143,10 +151,7 @@
   
 (require 'package)
 (add-to-list 'package-archives
-             '("gnu" . "http://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/"))
-;(package-initialize)
 
 ;; Initialise the packages, avoiding a re-initialisation.
 (unless (bound-and-true-p package--initialized)
@@ -252,14 +257,8 @@
 (if (version<= "27.0" emacs-version)
   (progn
     (require 'display-line-numbers)
-    (define-globalized-minor-mode global-display-line-numbers-mode
-      display-line-numbers-mode
-      (lambda ()
-        (if (and
-             (not (string-match "^\*.*\*$" (buffer-name)))
-             (not (eq major-mode 'dired-mode)))
-            (display-line-numbers-mode 1))))
-    (global-display-line-numbers-mode)
+    (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+    ;(add-hook 'text-mode-hook #'display-line-numbers-mode)
     (setq-default display-line-numbers-grow-only t)
     (setq-default display-line-numbers-width 3)))
 
@@ -340,6 +339,15 @@
     (global-display-fill-column-indicator-mode)
     (setq-default fill-column 100)))
 
+;(display-battery-mode 1)
+
+(use-package undo-tree
+  :ensure t
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
 
 ;;;##############################################################
 ;;; load theme
@@ -418,9 +426,9 @@
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0.5)
-  (global-company-mode 1)
-  (global-set-key (kbd "C-<tab>") 'company-complete))
+    (setq company-idle-delay 0.5)
+    (global-company-mode 1)
+    (global-set-key (kbd "C-<tab>") 'company-complete))
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - yasnippet
@@ -537,9 +545,6 @@
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-(eval-after-load 'speedbar
-  '(speedbar-add-supported-extension ".go"))
-
 ;;;##############################################################
 ;;; slime
 ;;;##############################################################
@@ -556,52 +561,21 @@
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;;;##############################################################
-;; sr-speedbar
+;; neotree
 ;;;##############################################################
 
-;it's removed in emacs24 - copied from http://www.emacswiki.org/emacs/SrSpeedbar
-(defun ad-advised-definition-p (definition) 
-  "Return non-nil if DEFINITION was generated from advice information."
-  (if 
-    (or (ad-lambda-p definition) 
-      (macrop definition)
-      (ad-compiled-p definition))
-    (let ((docstring (ad-docstring definition)))
-      (and (stringp docstring) 
-        (get-text-property 0 ‘dynamic-docstring-function docstring)))))
-
-(require 'sr-speedbar)
-;(global-set-key (kbd "s-s") 'sr-speedbar-toggle)
-(setq speedbar-hide-button-brackets-flag t)
-(setq speedbar-show-unknown-files t)
-(setq speedbar-smart-directory-expand-flag t)
-(setq speedbar-use-images nil)
-(setq sr-speedbar-skip-other-window-p t)
-(setq sr-speedbar-max-width 15)
-(setq sr-speedbar-width 15)
-(setq sr-speedbar-right-side nil)
-(setq sr-speedbar-width-console 10)
-
-(when window-system
-  (defadvice sr-speedbar-open (after sr-speedbar-open-resize-frame activate)
-    (set-frame-width (selected-frame)
-                     (+ (frame-width) sr-speedbar-width)))
-  (ad-enable-advice 'sr-speedbar-open 'after 'sr-speedbar-open-resize-frame)
-
-  (defadvice sr-speedbar-close (after sr-speedbar-close-resize-frame activate)
-    (sr-speedbar-recalculate-width)
-    (set-frame-width (selected-frame)
-                     (- (frame-width) sr-speedbar-width)))
-  (ad-enable-advice 'sr-speedbar-close 'after 'sr-speedbar-close-resize-frame))
-
-;;; start speedbar if we're using a window system
-(when window-system
-  (sr-speedbar-open))
-
-(when window-system
-  (with-current-buffer sr-speedbar-buffer-name
-    (setq window-size-fixed 'width)
-    (setq cursor-in-non-selected-windows nil)))
+(use-package neotree
+  :config
+    (progn
+      (setq neo-smart-open t)
+      (setq neo-autorefresh t)
+      (setq neo-toggle-window-keep-p t)
+      (setq neo-theme 'ascii)
+      (setq neo-hide-cursor t)
+      ;; (setq-default neo-show-hidden-files nil)
+      (neotree-show)
+      (global-set-key [f2] 'neotree-toggle)
+      (global-set-key [f8] 'neotree-dir)))
 
 ;;;##############################################################
 ;; search mode hook - like vim * search
@@ -778,7 +752,7 @@ vi style of % jumping to matching brace."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(web-mode blacken exec-path-from-shell minions simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile projectile-speedbar pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters sr-speedbar yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
+   '(undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
