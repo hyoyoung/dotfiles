@@ -572,10 +572,8 @@
       (setq neo-toggle-window-keep-p t)
       (setq neo-theme 'ascii)
       (setq neo-hide-cursor t)
-      ;; (setq-default neo-show-hidden-files nil)
+      ;(setq-default neo-show-hidden-files nil)
       (neotree-show)
-      (global-set-key [f2] 'neotree-toggle)
-      (global-set-key [f8] 'neotree-dir)))
 
 ;;;##############################################################
 ;; search mode hook - like vim * search
