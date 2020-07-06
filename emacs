@@ -573,7 +573,7 @@
       (setq neo-theme 'ascii)
       (setq neo-hide-cursor t)
       ;(setq-default neo-show-hidden-files nil)
-      (neotree-show)
+      (neotree-show)))
 
 ;;;##############################################################
 ;; search mode hook - like vim * search
