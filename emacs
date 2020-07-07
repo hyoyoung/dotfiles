@@ -48,8 +48,6 @@
   (setq mac-option-modifier 'meta)
   (define-key global-map [home] 'beginning-of-line)
   (define-key global-map [end] 'end-of-line)
-  (define-key global-map [help] 'overwrite-mode)
-  (define-key global-map [S-help] 'clipboard-yank)
 
   (defun copy-from-osx ()
     (shell-command-to-string "pbpaste"))
