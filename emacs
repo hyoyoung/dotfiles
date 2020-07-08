@@ -2,10 +2,6 @@
 ;;; linux settings
 ;;;##############################################################
 (defun my-linux-conf ()
-  ;;;##############################################################
-  ;;; 폰트 및 창 크기 설정
-  ;;;##############################################################
-  
   (if (eq window-system 'x)
     (progn
       (set-face-attribute 'default nil :family "Hack")
@@ -20,10 +16,6 @@
       (global-unset-key (kbd "S-SPC")) ; switch input method
       (global-unset-key (kbd "<f9>")) ; change to hanja
 
-      ;;;##############################################################
-      ;;; 한국어 사용을 위한 설정
-      ;;;##############################################################
-      
       (global-set-key [(Hangul)] 'toggle-input-method)
       (global-set-key [(Hangul_Hanja)] 'hangul-to-hanja-conversion)
     )
@@ -36,9 +28,6 @@
 ;;; darwin settings
 ;;;##############################################################
 (defun my-darwin-conf ()
-  ;;;##############################################################
-  ;;; mac default settings
-  ;;;##############################################################
   (set-face-attribute 'default nil :family "Menlo")
   ;(setq face-font-rescale-alist '((".*Apple SD Gothic Neo.*" . 1.35))
   ;; To enable sRGB
@@ -92,9 +81,6 @@
   )
   ((string-equal system-type "gnu/linux") ; linux
     (progn
-      ;;;##############################################################
-      ;;; linux default settings
-      ;;;##############################################################
       (setq my-frame-x 20)
       (setq my-frame-y 20)
       (setq my-frame-height 45)
@@ -125,9 +111,6 @@
 ;;; font conf
 ;;;##############################################################
 
-;; default Latin font (e.g. Consolas)
-;(set-face-attribute 'default nil :family "Consolas")
-
 ;; default font size (point * 10)
 ;;
 ;; WARNING!  Depending on the default font,
@@ -135,11 +118,6 @@
 ;; so that the beginning of the buffer may not be visible correctly. 
 (if (boundp 'my-font-height)
   (set-face-attribute 'default nil :height my-font-height))
-
-;; use specific font for Korean charset.
-;; if you want to use different font size for specific charset,
-;; add :size POINT-SIZE in the font-spec.
-;; (set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
 
 ;;;##############################################################
 ;;; package managers
@@ -199,20 +177,16 @@
 ;;;##############################################################
 ;;; global setting
 ;;;##############################################################
-;(setq inhibit-startup-message t)
+(setq inhibit-startup-message t)
 (setq column-number-mode t)
 (display-time)
 (defalias 'yes-or-no-p 'y-or-n-p)       ; use y/n instead of yes/no
 
 (show-paren-mode t) ; turn on paren match highlighting
-;(setq show-paren-style 'expression) ; highlight entire bracket expression
 (setq show-paren-style 'mixed) 
 
 ;; show file size
 (size-indication-mode)
-
-;; turn off word wrap
-;(setq default-truncate-lines t)
 
 (require 'icomplete)
 (icomplete-mode 1)                      ; incremental minibuffer completion
@@ -221,12 +195,12 @@
 
 ;;;InteractivelyDoThings mode to auto complete in minibuffer
 (require 'ido)
+(require 'ido-completing-read+)
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (setq ido-complete-space-or-hyphen-mode t)
 (setq ido-confirm-unique-completion t)
-(require 'ido-completing-read+)
 (setq ido-ubiquitous-mode t)
 
 (require 'amx)
@@ -248,11 +222,10 @@
   (progn
     (require 'display-line-numbers)
     (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-    ;(add-hook 'text-mode-hook #'display-line-numbers-mode)
     (setq-default display-line-numbers-grow-only t)
     (setq-default display-line-numbers-width 3)))
 
-;;; focus to the main buffer
+;; focus to the main buffer
 (setq initial-buffer-choice t)
 
 ; for mule
@@ -260,7 +233,6 @@
 
 ;; autocomplete paired brackets
 (electric-pair-mode 1)
-;(setq-default electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 
 (autoload 'zap-up-to-char "misc"
   "Kill up to, but not including ARGth occurrence of CHAR." t)
@@ -286,13 +258,12 @@
 (global-set-key (kbd "<end>") 'move-end-of-line)
 
 ; unset unused keys
-(global-unset-key (kbd "C-x f")) ; set fill column
-(global-unset-key (kbd "C-x C-n")) ; set-goal-column
-(when window-system (global-unset-key (kbd "C-z"))) ; don't minize
+(global-unset-key (kbd "C-x f")) ; don't set fill column
+(global-unset-key (kbd "C-x C-n")) ; don't set-goal-column
+(when window-system (global-unset-key (kbd "C-z"))) ; don't minimize
 (global-unset-key (kbd "C-x C-z")) ; don't suspend
 (global-unset-key (kbd "C-x z")) ; don't repeat
-(global-unset-key (kbd "C-x f")) ; don't set fill column
-(global-unset-key [mode-line mouse-3]) ; don't remove other windows
+(global-unset-key [mode-line mouse-3]) ; don't enlarge mode-line
 
 ;;; clean up the mode line
 (require 'minions)
@@ -341,7 +312,6 @@
 ;;;##############################################################
 ;;; load theme
 ;;;#############################################################
-;(load-theme 'tomorrow-night-dawn t)
 (load-theme 'midnight-dawn t)
 
 ;;;##############################################################
@@ -372,7 +342,7 @@
     ((python-mode-hook . lsp-deferred)
       (go-mode-hook . lsp-deferred))
   :config
-  ;(setq lsp-prefer-flymake nil)
+  (setq lsp-prefer-flymake nil)
   (setq lsp-enable-snippet nil)
   (setq lsp-auto-guess-root t) ; lsp with projectile
   ;(setq lsp-log-io nil)
@@ -396,17 +366,16 @@
   :commands lsp-ui-mode
   :init)
   :config
-   (setq
-         lsp-modeline-code-actions-enable nil
-         lsp-ui-doc-position 'top
-         lsp-ui-doc-include-signature t
-         lsp-ui-doc-delay 0.5
-         lsp-ui-sideline-delay 0.5
-         lsp-ui-sideline-code-actions-prefix "💡 "
-         lsp-ui-sideline-diagnostic-max-lines 3
-         lsp-ui-sideline-ignore-duplicate t
-         ;lsp-ui-sideline-show-hover t
-   )
+    (setq
+      lsp-modeline-code-actions-enable nil
+      lsp-ui-doc-position 'top
+      lsp-ui-doc-include-signature t
+      lsp-ui-doc-delay 0.5
+      lsp-ui-sideline-delay 0.5
+      lsp-ui-sideline-code-actions-prefix "💡 "
+      lsp-ui-sideline-diagnostic-max-lines 3
+      lsp-ui-sideline-ignore-duplicate t
+      ;lsp-ui-sideline-show-hover t)
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - company
@@ -588,7 +557,6 @@
             isearch-yank-flag t)
       (isearch-search-and-update))))
 (add-hook 'isearch-mode-hook #'my-isearch-yank-word-hook)
-;(global-set-key [f9] 'my-isearch-word-at-point)
 (global-set-key (kbd "C-*") 'my-isearch-word-at-point)
 
 ;;;##############################################################
@@ -660,23 +628,6 @@ whitespaces of the next line. Otherwise it would kill current word."
       ))
 (global-set-key (kbd "C-d") 'kill-word-vi-style)
 
-;;---
-;; http://www.emacswiki.org/emacs/ParenthesisMatching
-(defun goto-match-paren (arg)
-  "Go to the matching parenthesis if on parenthesis, otherwise insert %.
-vi style of % jumping to matching brace."
-  (interactive "p")
-  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
-        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
-        (t (self-insert-command (or arg 1)))))
-(global-set-key "%" 'goto-match-paren)
-
-(defun top-join-line ()
-  "Join the following line with current line"
-  (interactive)
-  (delete-indentation 1))
-(global-set-key (kbd "C-^") 'top-join-line)
-
 ;;;##############################################################
 ;;; projectile
 ;;;##############################################################
@@ -691,9 +642,7 @@ vi style of % jumping to matching brace."
 
 (defun my-projectile-mode ()
   (projectile-mode 1))
-(dolist (target-hook (list
-               'prog-mode-hook
-               ))
+(dolist (target-hook (list 'prog-mode-hook))
   (add-hook target-hook #'my-projectile-mode))
 
 ;(setq projectile-globally-ignored-files '("TAGS" "GPATH" "GRTAGS" "GSYMS" "GTAGS"))
@@ -712,7 +661,6 @@ vi style of % jumping to matching brace."
 ;(setq tramp-verbose 10)
 
 ;; auto save when lose input focus
-;(add-hook 'focus-out-hook 'save-buffer)
 (defun my-focus-out-hook ()
   (save-some-buffers t))
 (add-hook 'focus-out-hook #'my-focus-out-hook)
