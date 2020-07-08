@@ -195,17 +195,11 @@
 
 (add-to-list 'custom-theme-load-path
   (file-name-as-directory "~/.emacs.d/site-lisp/midnight-dawn-theme"))
-;; https://github.com/emacs-jp/replace-colorthemes
-;(add-to-list 'custom-theme-load-path
-;  (file-name-as-directory "~/.emacs.d/site-lisp/replace-colorthemes"))
-;; https://github.com/ChrisKempson/Tomorrow-Theme
-;(add-to-list 'custom-theme-load-path
-;  (file-name-as-directory "~/.emacs.d/site-lisp/tomorrow-theme"))
 
 ;;;##############################################################
 ;;; global setting
 ;;;##############################################################
-(setq inhibit-startup-message t)
+;(setq inhibit-startup-message t)
 (setq column-number-mode t)
 (display-time)
 (defalias 'yes-or-no-p 'y-or-n-p)       ; use y/n instead of yes/no
@@ -300,21 +294,14 @@
 (global-unset-key (kbd "C-x f")) ; don't set fill column
 (global-unset-key [mode-line mouse-3]) ; don't remove other windows
 
-;;; the mood line
-;(mood-line-mode)
-
 ;;; clean up the mode line
 (require 'minions)
 (setq minions-mode-line-lighter "☰")
 (minions-mode 1)
-;(if (bound-and-true-p mood-line-mode)
-;  (setq minions-direct '(projectile-mode))
-;  (setq minions-direct '(projectile-mode flycheck-mode)))
 (setq minions-direct '(projectile-mode flycheck-mode))
 
 (require 'simple-modeline)
 (simple-modeline-mode)
-
 
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
@@ -344,6 +331,12 @@
     (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t)
     (setq undo-tree-visualizer-diff t)))
+
+;;; show color codes in buffer
+(use-package rainbow-mode
+  :config
+  (setq rainbow-x-colors nil)
+  (add-hook 'prog-mode-hook 'rainbow-mode))
 
 ;;;##############################################################
 ;;; load theme
@@ -746,7 +739,7 @@ vi style of % jumping to matching brace."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
+   '(rainbow-mode undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
