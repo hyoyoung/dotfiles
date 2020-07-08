@@ -29,7 +29,6 @@
 ;;;##############################################################
 (defun my-darwin-conf ()
   (set-face-attribute 'default nil :family "Menlo")
-  ;(setq face-font-rescale-alist '((".*Apple SD Gothic Neo.*" . 1.35))
   ;; To enable sRGB
   (setq ns-use-srgb-colorspace t)
   
@@ -306,8 +305,9 @@
 ;;; show color codes in buffer
 (use-package rainbow-mode
   :config
-  (setq rainbow-x-colors nil)
-  (add-hook 'prog-mode-hook 'rainbow-mode))
+    (progn
+      (setq rainbow-x-colors nil)
+      (add-hook 'prog-mode-hook 'rainbow-mode)))
 
 ;;;##############################################################
 ;;; load theme
@@ -342,22 +342,22 @@
     ((python-mode-hook . lsp-deferred)
       (go-mode-hook . lsp-deferred))
   :config
-  (setq lsp-prefer-flymake nil)
-  (setq lsp-enable-snippet nil)
-  (setq lsp-auto-guess-root t) ; lsp with projectile
-  ;(setq lsp-log-io nil)
-  (setq lsp-enable-folding nil)
-  (setq lsp-enable-symbol-highlighting nil)
-  (setq lsp-enable-links nil)
-  (setq lsp-client-packages '(lsp-pyls lsp-go))
-  (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
-  (setq lsp-restart 'auto-restart)
-  (lsp-register-custom-settings
-    '(("pyls.plugins.pyls_mypy.enabled" t t)
-      ("pyls.plugins.pyls_mypy.live_mode" nil t)
-      ("pyls.plugins.pyls_black.enabled" t t)
-      ("pyls.plugins.pyls_isort.enabled" t t)))
-)
+    (progn
+      (setq lsp-prefer-flymake nil)
+      (setq lsp-enable-snippet nil)
+      (setq lsp-auto-guess-root t) ; lsp with projectile
+      ;(setq lsp-log-io nil)
+      (setq lsp-enable-folding nil)
+      (setq lsp-enable-symbol-highlighting nil)
+      (setq lsp-enable-links nil)
+      (setq lsp-client-packages '(lsp-pyls lsp-go))
+      (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
+      (setq lsp-restart 'auto-restart)
+      (lsp-register-custom-settings
+        '(("pyls.plugins.pyls_mypy.enabled" t t)
+          ("pyls.plugins.pyls_mypy.live_mode" nil t)
+          ("pyls.plugins.pyls_black.enabled" t t)
+          ("pyls.plugins.pyls_isort.enabled" t t)))))
 
 ;;Optional - provides fancier overlays.
 (use-package lsp-ui
@@ -374,8 +374,8 @@
       lsp-ui-sideline-delay 0.5
       lsp-ui-sideline-code-actions-prefix "💡 "
       lsp-ui-sideline-diagnostic-max-lines 3
-      lsp-ui-sideline-ignore-duplicate t
-      ;lsp-ui-sideline-show-hover t)
+      lsp-ui-sideline-show-hover t
+      lsp-ui-sideline-ignore-duplicate t)
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - company
@@ -489,9 +489,9 @@
   (setq exec-path (append exec-path '("~/local/go/bin/")))
   (setq tab-width 4)
   (setq indent-tabs-mode t)
-  (setq show-trailing-whitespace t))
+  (setq show-trailing-whitespace t)
   (setq lsp-gopls-staticcheck t)
-  (setq lsp-gopls-complete-unimported t)
+  (setq lsp-gopls-complete-unimported t))
 (add-hook 'go-mode-hook #'my-go-mode-hook)
 
 ;go get -u golang.org/x/tools/gopls
@@ -646,7 +646,6 @@ whitespaces of the next line. Otherwise it would kill current word."
   (add-hook target-hook #'my-projectile-mode))
 
 ;(setq projectile-globally-ignored-files '("TAGS" "GPATH" "GRTAGS" "GSYMS" "GTAGS"))
-;(setq projectile-globally-ignored-file-suffixes '("~")
 
 (eval-after-load 'projectile
   (setq-default projectile-mode-line-prefix " Proj"))
