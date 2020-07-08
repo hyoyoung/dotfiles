@@ -28,8 +28,8 @@
       (global-set-key [(Hangul_Hanja)] 'hangul-to-hanja-conversion)
     )
   )
-  (setenv "GOPATH" "/home/hyoyoung/local/go")
-  (add-to-list 'exec-path "/home/hyoyoung/local/go/bin")
+  (setenv "GOPATH" (expand-file-name "~/local/go"))
+  (add-to-list 'exec-path (expand-file-name "~/local/go/bin"))
 )
 
 ;;;##############################################################
@@ -69,7 +69,7 @@
           (concat brew-bin-path ":"
                   (getenv "PATH"))
   )
-  (setenv "GOPATH" "/Users/hyoyoung/local/go")
+  (setenv "GOPATH" (expand-file-name "~/local/go"))
   ;; add brew path to eshell's path
   (add-hook 'eshell-mode-hook
      '(lambda nil
