@@ -46,8 +46,6 @@
   
   ;; key bindings
   (setq mac-option-modifier 'meta)
-  (define-key global-map [home] 'beginning-of-line)
-  (define-key global-map [end] 'end-of-line)
 
   (defun copy-from-osx ()
     (shell-command-to-string "pbpaste"))
