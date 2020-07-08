@@ -17,11 +17,7 @@
       (global-unset-key (kbd "<f9>")) ; change to hanja
 
       (global-set-key [(Hangul)] 'toggle-input-method)
-      (global-set-key [(Hangul_Hanja)] 'hangul-to-hanja-conversion)
-    )
-  )
-  (setenv "GOPATH" (expand-file-name "~/local/go"))
-  (add-to-list 'exec-path (expand-file-name "~/local/go/bin"))
+      (global-set-key [(Hangul_Hanja)] 'hangul-to-hanja-conversion)))
 )
 
 ;;;##############################################################
@@ -48,21 +44,15 @@
   ; unset unused keys
   (global-unset-key (kbd "S-SPC")) ; switch input method
 
-  ;; path
-  (setq brew-bin-path "/usr/local/bin/")
   ;; add brew path
+  (setq brew-bin-path "/usr/local/bin/")
   (add-to-list 'exec-path brew-bin-path)
   ;; shell-command-to-string error
-  (setenv "PATH" 
-          (concat brew-bin-path ":"
-                  (getenv "PATH"))
-  )
-  (setenv "GOPATH" (expand-file-name "~/local/go"))
+  (setenv "PATH" (concat brew-bin-path ":" (getenv "PATH")))
   ;; add brew path to eshell's path
   (add-hook 'eshell-mode-hook
      '(lambda nil
-     (setq eshell-path-env (concat brew-bin-path ":" eshell-path-env)))
-  )
+       (setq eshell-path-env (concat brew-bin-path ":" eshell-path-env))))
 )
 
 ;;;##############################################################
@@ -186,6 +176,11 @@
 
 ;; show file size
 (size-indication-mode)
+
+;; auto save when lose input focus
+(defun my-focus-out-hook ()
+  (save-some-buffers t))
+(add-hook 'focus-out-hook #'my-focus-out-hook)
 
 (require 'icomplete)
 (icomplete-mode 1)                      ; incremental minibuffer completion
@@ -331,6 +326,9 @@
 ;;; 프로그래밍 모드 - lsp
 ;;;##############################################################
 
+(setenv "GOPATH" (expand-file-name "~/local/go"))
+(add-to-list 'exec-path (expand-file-name "~/local/go/bin"))
+
 (setq lsp-eldoc-render-all nil) ; show only functions' signature
 (setq lsp-signature-render-documentation nil)
 (setq lsp-signature-auto-activate nil)
@@ -363,19 +361,16 @@
 (use-package lsp-ui
   :requires lsp-mode flycheck
   :ensure t
-  :commands lsp-ui-mode
-  :init)
-  :config
-    (setq
-      lsp-modeline-code-actions-enable nil
-      lsp-ui-doc-position 'top
-      lsp-ui-doc-include-signature t
-      lsp-ui-doc-delay 0.5
-      lsp-ui-sideline-delay 0.5
-      lsp-ui-sideline-code-actions-prefix "💡 "
-      lsp-ui-sideline-diagnostic-max-lines 3
-      lsp-ui-sideline-show-hover t
-      lsp-ui-sideline-ignore-duplicate t)
+  :commands lsp-ui-mode)
+(setq
+  lsp-modeline-code-actions-enable nil
+  lsp-ui-doc-position 'top
+  lsp-ui-doc-include-signature t
+  lsp-ui-doc-delay 0.5
+  lsp-ui-sideline-delay 0.5
+  lsp-ui-sideline-code-actions-prefix "💡 "
+  lsp-ui-sideline-diagnostic-max-lines 3
+  lsp-ui-sideline-ignore-duplicate t)
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - company
@@ -589,11 +584,7 @@
   (highlight-symbol-nav-mode t))
 (when window-system
   ;(setq highlight-symbol-idle-delay 0.5)
-  (dolist (hook '(emacs-lisp-mode-hook lisp-interaction-mode-hook java-mode-hook
-                   c-mode-common-hook python-mode-hook ruby-mode-hook html-mode-hook
-                   go-mode-hook
-                   sh-mode-hook Info-mode-hook))
-    (add-hook hook #'my-highlight-symbol-hook)))
+    (add-hook 'prog-mode-hook #'my-highlight-symbol-hook))
 
 ;;;##############################################################
 ;; window-move
@@ -624,8 +615,7 @@ whitespaces of the next line. Otherwise it would kill current word."
         (delete-horizontal-space)
        (if (eolp)
           (delete-indentation t)
-        (kill-word arg)))
-      ))
+        (kill-word arg)))))
 (global-set-key (kbd "C-d") 'kill-word-vi-style)
 
 ;;;##############################################################
@@ -642,8 +632,7 @@ whitespaces of the next line. Otherwise it would kill current word."
 
 (defun my-projectile-mode ()
   (projectile-mode 1))
-(dolist (target-hook (list 'prog-mode-hook))
-  (add-hook target-hook #'my-projectile-mode))
+(add-hook 'prog-mode-hook #'my-projectile-mode)
 
 ;(setq projectile-globally-ignored-files '("TAGS" "GPATH" "GRTAGS" "GSYMS" "GTAGS"))
 
@@ -658,21 +647,6 @@ whitespaces of the next line. Otherwise it would kill current word."
 ;(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 ;(setq tramp-debug-buffer t)
 ;(setq tramp-verbose 10)
-
-;; auto save when lose input focus
-(defun my-focus-out-hook ()
-  (save-some-buffers t))
-(add-hook 'focus-out-hook #'my-focus-out-hook)
-
-;show empty lines
-;(setq-default indicate-empty-lines t)
-;(when (not indicate-empty-lines)
-;  (toggle-indicate-empty-lines))
-
-;(require 'w3m)
-;(setq w3m-use-cookies t)
-;(setq w3m-default-display-inline-images t)
-
 
 ;eshell completion
 (add-hook
