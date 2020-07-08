@@ -572,15 +572,11 @@
 (require 'highlight-symbol)
 (global-set-key (kbd "<M-up>") 'highlight-symbol-remove-all)
 (global-set-key (kbd "<M-down>") 'highlight-symbol-at-point)
-;(global-set-key (kbd "<M-left>") 'highlight-symbol-next)
-;(global-set-key (kbd "<M-right>") 'highlight-symbol-prev)
 (setq highlight-symbol-on-navigation-p t)
 
 (defun my-highlight-symbol-hook ()
-  ;(highlight-symbol-mode t)
   (highlight-symbol-nav-mode t))
 (when window-system
-  ;(setq highlight-symbol-idle-delay 0.5)
     (add-hook 'prog-mode-hook #'my-highlight-symbol-hook))
 
 ;;;##############################################################
