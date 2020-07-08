@@ -126,9 +126,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
 ;; Configure `use-package' prior to loading it.
 (eval-and-compile
-  (setq use-package-always-ensure nil)
   (setq use-package-always-defer nil)
   (setq use-package-always-demand nil)
   (setq use-package-expand-minimally nil)
@@ -290,7 +292,6 @@
 ;(display-battery-mode 1)
 
 (use-package undo-tree
-  :ensure t
   :config
   (progn
     (global-undo-tree-mode)
@@ -334,7 +335,6 @@
 (setq lsp-signature-auto-activate nil)
 
 (use-package lsp-mode
-  :ensure t
   :commands (lsp lsp-deferred)
   :hook
     ((python-mode-hook . lsp-deferred)
@@ -360,7 +360,6 @@
 ;;Optional - provides fancier overlays.
 (use-package lsp-ui
   :requires lsp-mode flycheck
-  :ensure t
   :commands lsp-ui-mode)
 (setq
   lsp-modeline-code-actions-enable nil
@@ -377,7 +376,6 @@
 ;;;##############################################################
 
 (use-package company
-  :ensure t
   :config
     (setq company-idle-delay 0.5)
     (global-company-mode 1)
@@ -388,7 +386,6 @@
 ;;;##############################################################
 
 ;(use-package yasnippet
-;  :ensure t
 ;  :commands yas-minor-mode
 ;  :hook (go-mode-hook . yas-minor-mode))
 
