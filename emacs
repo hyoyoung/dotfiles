@@ -13,7 +13,6 @@
         browse-url-generic-program "x-www-browser")
 
       ; unset unused keys
-      (global-unset-key (kbd "S-SPC")) ; switch input method
       (global-unset-key (kbd "<f9>")) ; change to hanja
 
       (global-set-key [(Hangul)] 'toggle-input-method)
@@ -41,9 +40,6 @@
   (setq interprogram-cut-function 'paste-to-osx)
   (setq interprogram-paste-function 'copy-from-osx)
 
-  ; unset unused keys
-  (global-unset-key (kbd "S-SPC")) ; switch input method
-
   ;; add brew path
   (setq brew-bin-path "/usr/local/bin/")
   (add-to-list 'exec-path brew-bin-path)
@@ -65,9 +61,7 @@
       (setq my-frame-width 160)
       (setq my-font-height 140)
 
-      (my-darwin-conf)
-    )
-  )
+      (my-darwin-conf)))
   ((string-equal system-type "gnu/linux") ; linux
     (progn
       (setq my-frame-x 20)
@@ -76,9 +70,7 @@
       (setq my-frame-width 150)
       (setq my-font-height 85)
 
-      (my-linux-conf)
-    )
-  )
+      (my-linux-conf)))
 )
 
 ;;;##############################################################
@@ -254,6 +246,7 @@
 (global-set-key (kbd "<end>") 'move-end-of-line)
 
 ; unset unused keys
+(global-unset-key (kbd "S-SPC")) ; switch input method
 (global-unset-key (kbd "C-x f")) ; don't set fill column
 (global-unset-key (kbd "C-x C-n")) ; don't set-goal-column
 (when window-system (global-unset-key (kbd "C-z"))) ; don't minimize
@@ -279,15 +272,9 @@
 (if (version<= "27.0" emacs-version)
   (progn
     (require 'display-fill-column-indicator)
-    (define-globalized-minor-mode global-display-fill-column-indicator-mode
-      display-fill-column-indicator-mode
-      (lambda ()
-        (if (and
-             (not (string-match "^\*.*\*$" (buffer-name)))
-             (not (eq major-mode 'dired-mode)))
-            (display-fill-column-indicator-mode 1))))
-    (global-display-fill-column-indicator-mode)
-    (setq-default fill-column 100)))
+    (setq-default fill-column 100)
+    (add-hook 'text-mode-hook #'display-fill-column-indicator-mode)
+    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)))
 
 ;(display-battery-mode 1)
 
@@ -415,7 +402,6 @@
 (add-hook 'python-mode-hook #'my-python-mode-hook)
 
 (require 'pyvenv)
-
 (defun my-venv-with-window-buffer-change (newframe)
   (if (eq major-mode 'python-mode)
     (progn
