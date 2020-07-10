@@ -339,6 +339,9 @@
       (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
       (setq lsp-restart 'auto-restart)
       (lsp-register-custom-settings
+        '(("gopls.completeUnimported" t t)
+          ("gopls.staticcheck" t t)))
+      (lsp-register-custom-settings
         '(("pyls.plugins.pyls_mypy.enabled" t t)
           ("pyls.plugins.pyls_mypy.live_mode" nil t)
           ("pyls.plugins.pyls_black.enabled" t t)
@@ -372,9 +375,9 @@
 ;;; 프로그래밍 모드 - yasnippet
 ;;;##############################################################
 
-;(use-package yasnippet
-;  :commands yas-minor-mode
-;  :hook (go-mode-hook . yas-minor-mode))
+(use-package yasnippet
+  :commands yas-minor-mode
+  :hook (go-mode-hook . yas-minor-mode))
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - python
@@ -450,7 +453,7 @@
 ; # binary will be $(go env GOPATH)/bin/golangci-lint
 ; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
 
-(defun my-go-mode-hook ()
+(defun my-golang-mode-hook ()
   ; Customize compile command to run go build
   (if (not (string-match "go" compile-command))
       (set (make-local-variable 'compile-command)
@@ -467,19 +470,17 @@
   (setq exec-path (append exec-path '("~/local/go/bin/")))
   (setq tab-width 4)
   (setq indent-tabs-mode t)
-  (setq show-trailing-whitespace t)
-  (setq lsp-gopls-staticcheck t)
-  (setq lsp-gopls-complete-unimported t))
-(add-hook 'go-mode-hook #'my-go-mode-hook)
+  (setq show-trailing-whitespace t))
+(add-hook 'go-mode-hook #'my-golang-mode-hook)
 
 ;go get -u golang.org/x/tools/gopls
 
 ;;Set up before-save hooks to format buffer and add/delete imports.
 ;;Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
+(defun my-lsp-golang-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+(add-hook 'go-mode-hook #'my-lsp-golang-install-save-hooks)
 
 ;;;##############################################################
 ;;; slime
