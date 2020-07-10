@@ -18,8 +18,6 @@ init_linux_conf() {
     fi
 
     alias sysupdate='sudo apt-get update && sudo apt-get dselect-upgrade -y && sudo apt-get clean'
-    alias mketags='find . -name "*.[chCH]" -print | etags -'
-    alias nvmplayer='mplayer -ao alsa -zoom -quiet -fs -vo vdpau -vc ffh264vdpau,ffmpeg12vdpau,ffwmv3vdpau,ffvc1vdpau,'
     alias open='xdg-open'
     alias chrome_hidpi='chromium-browser --force-device-scale-factor=2'
     
