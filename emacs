@@ -317,9 +317,8 @@
 (setenv "GOPATH" (expand-file-name "~/local/go"))
 (add-to-list 'exec-path (expand-file-name "~/local/go/bin"))
 
-(setq lsp-eldoc-render-all nil) ; show only functions' signature
-(setq lsp-signature-render-documentation nil)
-(setq lsp-signature-auto-activate nil)
+(setq lsp-prefer-capf t)
+(setq lsp-signature-render-documentation nil) ; show only functions' signature
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -356,6 +355,7 @@
   lsp-ui-doc-position 'top
   lsp-ui-doc-include-signature t
   lsp-ui-doc-delay 0.5
+  lsp-ui-sideline-update-mode 'line
   lsp-ui-sideline-delay 0.5
   lsp-ui-sideline-code-actions-prefix "💡 "
   lsp-ui-sideline-diagnostic-max-lines 3
@@ -466,7 +466,6 @@
   (local-set-key (kbd "M-]") 'next-error)
   (local-set-key (kbd "M-[") 'previous-error)
 
-  (go-eldoc-setup)
   (setq exec-path (append exec-path '("~/local/go/bin/")))
   (setq tab-width 4)
   (setq indent-tabs-mode t)
@@ -640,7 +639,7 @@ whitespaces of the next line. Otherwise it would kill current word."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rainbow-mode undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline mood-line fill-column-indicator magit py-autopep8 go-projectile projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-eldoc go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
+   '(rainbow-mode undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline mood-line fill-column-indicator magit py-autopep8 projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
