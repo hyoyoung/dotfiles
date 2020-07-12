@@ -320,6 +320,7 @@
 
 (setq lsp-prefer-capf t)
 (setq lsp-signature-render-documentation nil) ; show only functions' signature
+(setq lsp-signature-function #'eldoc-message) ; workaround signature two lines
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
