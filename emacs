@@ -500,7 +500,12 @@
 ;; neotree
 ;;;##############################################################
 
+(defun my-neotree-skip-other-window-hook (created)
+  (if (member 'window created)
+    (set-window-parameter neo-global--window 'no-other-window t)))
 (use-package neotree
+  :init
+    (add-hook 'neo-after-create-hook #'my-neotree-skip-other-window-hook)
   :config
     (progn
       (setq neo-smart-open t)
@@ -508,7 +513,6 @@
       (setq neo-toggle-window-keep-p t)
       (setq neo-theme 'ascii)
       (setq neo-hide-cursor t)
-      ;(setq-default neo-show-hidden-files nil)
       (neotree-show)))
 
 ;;;##############################################################
