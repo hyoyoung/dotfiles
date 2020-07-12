@@ -175,6 +175,7 @@
 (defun my-focus-out-hook ()
   (save-some-buffers t))
 (add-hook 'focus-out-hook #'my-focus-out-hook)
+(auto-save-visited-mode) ; auto save files every 5 seconds
 
 (require 'icomplete)
 (icomplete-mode 1)                      ; incremental minibuffer completion
