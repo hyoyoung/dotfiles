@@ -422,8 +422,8 @@
             (hack-local-variables)
             (pyvenv-activate my-default-venv-path)))))))
 ; after emacs 27.1
-(if (version<= "27.0" emacs-version)
-  (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
+;(if (version<= "27.0" emacs-version)
+;  (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
 
 ; pip install python-language-server[all]
 ; pip install pyls-mypy pyls-black pyls-isort
