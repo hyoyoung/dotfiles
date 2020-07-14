@@ -469,12 +469,13 @@
   (local-set-key (kbd "M-[") 'previous-error)
 
   (setq exec-path (append exec-path '("~/local/go/bin/")))
-  (setq tab-width 4)
+  (setq tab-width 8)
   (setq indent-tabs-mode t)
   (setq show-trailing-whitespace t))
 (add-hook 'go-mode-hook #'my-golang-mode-hook)
 
 ;go get -u golang.org/x/tools/gopls
+;go get -u honnef.co/go/tools/cmd/staticcheck
 
 ;;Set up before-save hooks to format buffer and add/delete imports.
 ;;Make sure you don't have other gofmt/goimports hooks enabled.
