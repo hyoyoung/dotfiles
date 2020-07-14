@@ -277,6 +277,21 @@
     (add-hook 'text-mode-hook #'display-fill-column-indicator-mode)
     (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)))
 
+(global-whitespace-mode 1)
+(setq
+   whitespace-style
+   '(face ; viz via faces
+     trailing ; trailing blanks visualized
+     lines-tail ; lines beyond whitespace-line-column
+     space-before-tab
+     space-after-tab
+     newline ; lines with only blanks
+     indentation ; spaces used for indent when config wants tabs
+     empty ; empty lines at beginning or end
+     )
+   whitespace-line-column 100 ; whitespace-mode says the line is too long
+)
+
 ;(display-battery-mode 1)
 
 (use-package undo-tree
