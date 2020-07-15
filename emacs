@@ -641,6 +641,19 @@ whitespaces of the next line. Otherwise it would kill current word."
   (setq-default projectile-mode-line-prefix " Proj"))
 
 ;;;##############################################################
+;;; flyspell
+;;;#############################################################
+
+(require 'flyspell)
+(setq flyspell-issue-message-flag nil
+      ispell-dictionary "en_US"
+      ispell-program-name "aspell"
+      ispell-extra-args '("--sug-mode=ultra"))
+
+(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'prog-mode-hook #'flyspell-prog-mode)
+
+;;;##############################################################
 ;;; misc
 ;;;#############################################################
 (require 'tramp)
@@ -648,6 +661,7 @@ whitespaces of the next line. Otherwise it would kill current word."
 ;(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 ;(setq tramp-debug-buffer t)
 ;(setq tramp-verbose 10)
+
 
 ;eshell completion
 (add-hook
