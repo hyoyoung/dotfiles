@@ -34,7 +34,10 @@ alias l='ls -CF'
 alias sysupdate='sudo apt-get update && sudo apt-get dselect-upgrade -y && sudo apt-get clean'
 alias open='xdg-open'
 alias chrome_hidpi='chromium-browser --force-device-scale-factor=2'
+# alias setxkbmap_nocaps='setxkbmap -layout us -option ctrl:nocaps'
+# left hand mouse
+# dconf read /org/gnome/desktop/peripherals/mouse/left-handed true
 
 # activate conda
-set -x PATH $PATH /home/hyoyoung/local/anaconda3/bin
-source (conda info --root)/etc/fish/conf.d/conda.fish
+# set -x PATH $PATH /home/hyoyoung/local/anaconda3/bin
+# source (conda info --root)/etc/fish/conf.d/conda.fish
