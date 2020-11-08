@@ -1,0 +1,2 @@
+# put a script to /lib/udev/rules.d
+ACTION=="add", SUBSYSTEM=="input", ATTR{id/vendor}=="your_vendor", ATTR{id/product}=="your_product", RUN+="your_script"
