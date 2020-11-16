@@ -1,4 +1,0 @@
-# put a script to /lib/udev/rules.d
-# check info with udevadm -a udevadm info -ap /sys/devices/virtual/input/mice/subsystem/inputXX
-# check conditions with udevadm test /sys/devices/virtual/input/mice/subsystem/inputXX 
-ACTION=="add", SUBSYSTEM=="input", ATTR{id/vendor}=="your_vendor", ATTR{id/product}=="your_product", RUN+="your_script"

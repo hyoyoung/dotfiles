@@ -1,4 +1,5 @@
 # path
+set -x PATH $PATH /home/hyoyoung/local/bin
 set -x PATH $PATH /usr/local/bin
 
 # golang
