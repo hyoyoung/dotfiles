@@ -1,8 +1,1 @@
-! capslock to left ctrl
-remove lock = Caps_Lock
-keycode 66 = Control_L
-add Control = Control_L
-
-! alt_r to hangul
-remove mod1 = Alt_R
-keycode 0x6c = Hangul
+/home/hyoyoung/.Xmodmap
