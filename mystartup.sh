@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 10
+sleep 3
 export DISPLAY=:0
 xmodmap ~/.Xmodmap
 for id in $(/usr/bin/xinput list | /bin/grep "USB Mouse\|Laser Mouse\|Bluetooth.* Mouse" | /bin/grep -o id=[0-9]* | sed 's/^...//');

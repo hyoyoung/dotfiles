@@ -9,3 +9,8 @@
 ### xorg tearing free conf
   * use dri3
     - https://askubuntu.com/questions/1234026/screen-tearing-on-ubuntu-xorg-20-04-with-intel-graphics
+
+### debian variants korean key settings
+  * edit /etc/default/keyboard
+    * XKBOPTIONS="ctrl:nocaps,korean:ralt_hangul"
+  * then run, 'sudo dpkg-reconfigure -phigh console-setup'
