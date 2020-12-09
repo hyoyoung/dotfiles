@@ -14,3 +14,6 @@
   * edit /etc/default/keyboard
     * XKBOPTIONS="ctrl:nocaps,korean:ralt_hangul"
   * then run, 'sudo dpkg-reconfigure -phigh console-setup'
+
+### model enable
+  * echo "at@nvm:fix_cat_fcclock.fcclock_mode=0" > /dev/ttyACM0
