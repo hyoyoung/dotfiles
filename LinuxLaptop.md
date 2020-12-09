@@ -16,4 +16,7 @@
   * then run, 'sudo dpkg-reconfigure -phigh console-setup'
 
 ### model enable
+  * mmcli -L
+  * mmcli -m 0 -d
   * echo "at@nvm:fix_cat_fcclock.fcclock_mode=0" > /dev/ttyACM0
+  * mmcli -m 0 -e
