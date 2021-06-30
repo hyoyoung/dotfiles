@@ -37,8 +37,8 @@
       (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
         (process-send-string proc text)
         (process-send-eof proc))))
-  (setq interprogram-cut-function 'paste-to-osx)
-  (setq interprogram-paste-function 'copy-from-osx)
+;  (setq interprogram-cut-function 'paste-to-osx)
+;  (setq interprogram-paste-function 'copy-from-osx)
 
   ;; add brew path
   (setq brew-bin-path "/usr/local/bin/")
@@ -261,8 +261,8 @@
 (minions-mode 1)
 (setq minions-direct '(projectile-mode flycheck-mode))
 
-(require 'simple-modeline)
-(simple-modeline-mode)
+;(require 'simple-modeline)
+;(simple-modeline-mode)
 
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
@@ -351,17 +351,17 @@
       (setq lsp-enable-folding nil)
       (setq lsp-enable-symbol-highlighting nil)
       (setq lsp-enable-links nil)
-      (setq lsp-client-packages '(lsp-pyls lsp-go))
+      (setq lsp-client-packages '(lsp-pylsp lsp-go))
       (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
       (setq lsp-restart 'auto-restart)
       (lsp-register-custom-settings
         '(("gopls.completeUnimported" t t)
           ("gopls.staticcheck" t t)))
       (lsp-register-custom-settings
-        '(("pyls.plugins.pyls_mypy.enabled" t t)
-          ("pyls.plugins.pyls_mypy.live_mode" nil t)
-          ("pyls.plugins.pyls_black.enabled" t t)
-          ("pyls.plugins.pyls_isort.enabled" t t)))))
+        '(("pylsp.plugins.pylsp_mypy.enabled" t t)
+          ("pylsp.plugins.pylsp_mypy.live_mode" nil t)
+          ("pylsp.plugins.pylsp_black.enabled" t t)
+          ("pylsp.plugins.pylsp_isort.enabled" t t)))))
 
 ;;Optional - provides fancier overlays.
 (use-package lsp-ui
@@ -403,7 +403,7 @@
 ;;; example of .dir-locals.el
 ;;; (
 ;;;   (python-mode . ((project-venv-path . "~/envs/some_env")))
-;;;   (python-mode . ((lsp-pyls-server-command . ("/home/user/envs/some_env/bin/pyls"))))
+;;;   (python-mode . ((lsp-pylsp-server-command . ("/home/user/envs/some_env/bin/pylsp"))))
 ;;;   (python-mode . ((pyvenv-activate . "~/envs/some_env")
 ;;;                 (subdirs . nil)))
 ;;; )
@@ -440,15 +440,14 @@
 ;(if (version<= "27.0" emacs-version)
 ;  (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
 
-; pip install python-language-server[all]
-; pip install pyls-mypy pyls-black pyls-isort
+; pip install python-lsp-server[all]
+; pip install pylsp-mypy pylsp-black pylsp-isort
 (defun lsp-python-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t))
 (add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
 
-(setq lsp-pyls-plugins-pycodestyle-max-line-length 100)
-;(setq lsp-pyls-plugins-pycodestyle-ignore '("E501")) ; long line warning
-
+(setq lsp-pylsp-plugins-pycodestyle-max-line-length 100)
+;(setq lsp-pylsp-plugins-pycodestyle-ignore '("E501")) ; long line warning
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - jinja2
@@ -468,7 +467,7 @@
 
 ; go get github.com/golangci/golangci-lint/cmd/golangci-lint
 ; # binary will be $(go env GOPATH)/bin/golangci-lint
-; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+; curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.35.2
 
 (defun my-golang-mode-hook ()
   ; Customize compile command to run go build
@@ -502,11 +501,11 @@
 ;;;##############################################################
 ;;; slime
 ;;;##############################################################
-(require 'slime-autoloads)
+;(require 'slime-autoloads)
 
 ;; Set your lisp system and, optionally, some contribs
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
-(setq slime-contribs '(slime-fancy))
+;(setq inferior-lisp-program "/usr/local/bin/sbcl")
+;(setq slime-contribs '(slime-fancy))
 
 ;;;##############################################################
 ;;; rainbow-delimiter
@@ -675,7 +674,7 @@ whitespaces of the next line. Otherwise it would kill current word."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rainbow-mode undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline fill-column-indicator magit py-autopep8 projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
+   '(dash rainbow-mode undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline fill-column-indicator magit py-autopep8 projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

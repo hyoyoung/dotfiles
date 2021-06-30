@@ -6,6 +6,7 @@ set -x PATH /usr/local/opt/scala@2.13/bin $PATH
 set -x PATH /usr/local/opt/curl/bin $PATH
 set -x PATH /usr/local/opt/llvm/bin $PATH
 set -x PATH /usr/local/opt/openssl/bin $PATH
+set -x PATH /usr/local/opt/mysql-client/bin $PATH
 
 # golang
 set -x GOPATH /Users/hyoyoung/local/go
