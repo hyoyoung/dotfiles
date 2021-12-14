@@ -26,6 +26,7 @@
 ``` slack.slice
 [Slice]
 AllowedCPUs=0-2
+CPUQuota=50%
 MemoryLimit=1G
 MemoryMax=1G
 MemoryHigh=500M
