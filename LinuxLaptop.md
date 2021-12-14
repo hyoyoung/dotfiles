@@ -20,3 +20,14 @@
   * mmcli -m 0 -d
   * echo "at@nvm:fix_cat_fcclock.fcclock_mode=0" > /dev/ttyACM0
   * mmcli -m 0 -e
+
+### limiting system resources with systemd and cgroup
+  * make a slice file to ~/.config/systemd/user
+``` slack.slice
+[Slice]
+AllowedCPUs=0-2
+MemoryLimit=1G
+MemoryMax=1G
+MemoryHigh=500M
+```
+  * editing the desktop file's Exec argument like '/usr/bin/systemd-run --user --slice=slack.slice /usr/bin/slack %U'
