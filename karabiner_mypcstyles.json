@@ -940,6 +940,7 @@
               "bundle_identifiers": [
                 "^org\\.mozilla\\.firefox$",
                 "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
             }

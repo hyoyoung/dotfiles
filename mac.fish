@@ -1,5 +1,6 @@
 # path
 set -x PATH /usr/local/sbin $PATH
+set -x PATH /opt/homebrew/sbin /opt/homebrew/bin $PATH
 set -x PATH $HOME/local/bin $PATH
 # brew utils
 set -x PATH /usr/local/opt/scala@2.13/bin $PATH
@@ -33,7 +34,7 @@ set -x GREP_OPTIONS '--color=auto'
 #set -x JAVA_HOME  (/usr/libexec/java_home)
 
 # add password manager
-source /usr/local/share/fish/vendor_completions.d/pass.fish
+# source /usr/local/share/fish/vendor_completions.d/pass.fish
 
 alias ls='ls -Fh'
 alias vi='vim'
