@@ -3,15 +3,12 @@ set -x PATH /usr/local/sbin $PATH
 set -x PATH /opt/homebrew/sbin /opt/homebrew/bin $PATH
 set -x PATH $HOME/local/bin $PATH
 # brew utils
-set -x PATH /usr/local/opt/scala@2.13/bin $PATH
-set -x PATH /usr/local/opt/curl/bin $PATH
-set -x PATH /usr/local/opt/llvm/bin $PATH
-set -x PATH /usr/local/opt/openssl/bin $PATH
-set -x PATH /usr/local/opt/mysql-client/bin $PATH
+set -x PATH /opt/homebrew/opt/sbt@0.13/bin $PATH
+set -x PATH /opt/homebrew/opt/scala@2.12/bin $PATH
 
 # golang
 set -x GOPATH /Users/hyoyoung/local/go
-set -x GOROOT /usr/local/opt/go/libexec
+set -x GOROOT /opt/homebrew/opt/go/libexec
 set -x PATH $PATH $GOPATH/bin $GOROOT/bin
 
 # ncc

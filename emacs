@@ -355,13 +355,7 @@
       (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
       (setq lsp-restart 'auto-restart)
       (lsp-register-custom-settings
-        '(("gopls.completeUnimported" t t)
-          ("gopls.staticcheck" t t)))
-      (lsp-register-custom-settings
-        '(("pylsp.plugins.pylsp_mypy.enabled" t t)
-          ("pylsp.plugins.pylsp_mypy.live_mode" nil t)
-          ("pylsp.plugins.pylsp_black.enabled" t t)
-          ("pylsp.plugins.pylsp_isort.enabled" t t)))))
+        '(("gopls.completeUnimported" t t)))))
 
 ;;Optional - provides fancier overlays.
 (use-package lsp-ui
@@ -416,9 +410,16 @@
     (setq show-trailing-whitespace t)
     (setq my-default-venv-path (expand-file-name "~/.emacs.d/venv/"))
     (pyvenv-activate my-default-venv-path)
-    (setenv "WORKON_HOME" "~/local/anaconda3/envs") ; to use conda
+    ;(setenv "WORKON_HOME" "~/local/anaconda3/envs") ; to use conda
     (pyvenv-mode 1)
-    (pyvenv-tracking-mode 1))
+    (pyvenv-tracking-mode 1)
+
+    (setq lsp-pylsp-plugins-flake8-max-line-length 100)
+    ;(setq flycheck-flake8-maximum-line-length 100)
+    ;(setq lsp-pylsp-plugins-flake8-ignore ["D100" "D101"]) ; ignore docstring warnings
+    ;(setq lsp-pylsp-plugins-pycodestyle-ignore ["D100" "D101"]) ; ignore docstring warnings
+    (setq lsp-pylsp-plugins-pydocstyle-ignore ["D100" "D101" "D102" "D103" "D107"]) ; ignore docstring warnings
+)
 (add-hook 'python-mode-hook #'my-python-mode-hook)
 
 (require 'pyvenv)
@@ -441,13 +442,16 @@
 ;  (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
 
 ; pip install python-lsp-server[all]
-; pip install pylsp-mypy pylsp-black pylsp-isort
 (defun lsp-python-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t))
 (add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
 
-(setq lsp-pylsp-plugins-pycodestyle-max-line-length 100)
+;(setq lsp-pylsp-plugins-pycodestyle-max-line-length 100)
+;(setq lsp-pylsp-plugins-flake8-max-line-length 100)
 ;(setq lsp-pylsp-plugins-pycodestyle-ignore '("E501")) ; long line warning
+;(setq lsp-pylsp-plugins-flake8-ignore '("E501")) ; long line warning
+;(setq flycheck-flake8-maximum-line-length 100)
+;(setq lsp-pylsp-plugins-flake8-ignore '("D100" "D101")) ; docstring
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - jinja2
@@ -628,7 +632,9 @@ whitespaces of the next line. Otherwise it would kill current word."
       projectile-remember-window-configs t
       projectile-indexing-method 'native
       projectile-completion-system (quote ivy)
-      projectile-switch-project-action (quote projectile-dired))
+      projectile-switch-project-action (quote projectile-dired)
+      venv-dirlookup-names '("venv" "venv3" "pyenv" ".venv")
+)
 
 (defun my-projectile-mode ()
   (projectile-mode 1))
@@ -646,7 +652,7 @@ whitespaces of the next line. Otherwise it would kill current word."
 (require 'flyspell)
 (setq flyspell-issue-message-flag nil
       ispell-dictionary "en_US"
-      ispell-program-name "aspell"
+      ispell-program-name "/opt/homebrew/bin/aspell"
       ispell-extra-args '("--sug-mode=ultra"))
 
 (add-hook 'text-mode-hook #'flyspell-mode)
