@@ -679,6 +679,15 @@ whitespaces of the next line. Otherwise it would kill current word."
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 
+(use-package tramp
+  :ensure nil
+  :config (progn
+            (setq tramp-use-ssh-controlmaster-options nil
+                  remote-file-name-inhibit-locks t
+                  tramp-verbose 1
+                  vc-ignore-dir-regexp (format "%s\\|%s"
+                                               vc-ignore-dir-regexp
+                                               tramp-file-name-regexp))))
 
 ;eshell completion
 (defun my-eshell-mode-hook ()
