@@ -679,6 +679,17 @@ whitespaces of the next line. Otherwise it would kill current word."
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 
+; tramp-lsp workaround
+; https://github.com/emacs-lsp/lsp-mode/issues/2514
+    (defun start-file-process-shell-command@around (start-file-process-shell-command name buffer &rest args)
+      "Start a program in a subprocess.  Return the process object for it.
+Similar to `start-process-shell-command', but calls `start-file-process'."
+      ;; On remote hosts, the local `shell-file-name' might be useless.
+      (let ((command (mapconcat 'identity args " ")))
+        (funcall start-file-process-shell-command name buffer command)))
+
+    (advice-add 'start-file-process-shell-command :around #'start-file-process-shell-command@around)
+
 (use-package tramp
   :ensure nil
   :config (progn
