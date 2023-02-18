@@ -294,12 +294,17 @@
 
 ;(display-battery-mode 1)
 
+
+;(global-undo-tree-mode nil)
 (use-package undo-tree
   :config
   (progn
     (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)))
+    (setq undo-tree-visualizer-diff t)
+    (setq undo-tree-auto-save-history t)
+    (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
+)
 
 ;;; show color codes in buffer
 (use-package rainbow-mode
@@ -667,6 +672,12 @@ whitespaces of the next line. Otherwise it would kill current word."
 ;(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 ;(setq tramp-debug-buffer t)
 ;(setq tramp-verbose 10)
+(defun tramp-set-auto-save ()
+  (auto-save-mode -1))
+(setq tramp-auto-save-directory "~/emacs.d/tramp-autosave")
+
+(setq make-backup-files nil)
+(setq create-lockfiles nil)
 
 
 ;eshell completion
@@ -679,7 +690,8 @@ whitespaces of the next line. Otherwise it would kill current word."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(dash rainbow-mode undo-tree neotree web-mode blacken exec-path-from-shell minions simple-modeline fill-column-indicator magit py-autopep8 projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-mode popup 0xc w3m org jedi fuzzy flycheck f)))
+   '(dash rainbow-mode neotree web-mode blacken exec-path-from-shell minions simple-modeline fill-column-indicator magit py-autopep8 projectile pyvenv ido-completing-read+ amx highlight-symbol rainbow-delimiters yasnippet use-package company lsp-ui lsp-mode flycheck-color-mode-line go-mode popup 0xc w3m org jedi fuzzy flycheck f))
+ '(tramp-verbose 6))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
