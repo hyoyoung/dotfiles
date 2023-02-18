@@ -46,9 +46,9 @@
   ;; shell-command-to-string error
   (setenv "PATH" (concat brew-bin-path ":" (getenv "PATH")))
   ;; add brew path to eshell's path
-  (add-hook 'eshell-mode-hook
-     '(lambda nil
-       (setq eshell-path-env (concat brew-bin-path ":" eshell-path-env))))
+  (defun my-darwin-brew-eshell-mode-hook ()
+    (setq eshell-path-env (concat brew-bin-path ":" eshell-path-env)))
+  (add-hook 'eshell-mode-hook #'my-darwin-brew-eshell-mode-hook)
 )
 
 ;;;##############################################################
@@ -78,15 +78,15 @@
 ;;;##############################################################
 
 ; default window width and height
-(defun custom-set-frame-size ()
+(defun my-custom-set-frame-size ()
   (if (boundp 'my-frame-x)
     (add-to-list 'default-frame-alist `(top . ,my-frame-x)))
   (if (boundp 'my-frame-y)
     (add-to-list 'default-frame-alist `(left . ,my-frame-y)))
   (add-to-list 'default-frame-alist `(height . ,my-frame-height))
   (add-to-list 'default-frame-alist `(width . ,my-frame-width)))
-(custom-set-frame-size)
-(add-hook 'before-make-frame-hook #'custom-set-frame-size)
+(my-custom-set-frame-size)
+(add-hook 'before-make-frame-hook #'my-custom-set-frame-size)
 
 ;;;##############################################################
 ;;; font conf
@@ -415,9 +415,6 @@
     (pyvenv-tracking-mode 1)
 
     (setq lsp-pylsp-plugins-flake8-max-line-length 100)
-    ;(setq flycheck-flake8-maximum-line-length 100)
-    ;(setq lsp-pylsp-plugins-flake8-ignore ["D100" "D101"]) ; ignore docstring warnings
-    ;(setq lsp-pylsp-plugins-pycodestyle-ignore ["D100" "D101"]) ; ignore docstring warnings
     (setq lsp-pylsp-plugins-pydocstyle-ignore ["D100" "D101" "D102" "D103" "D107"]) ; ignore docstring warnings
 )
 (add-hook 'python-mode-hook #'my-python-mode-hook)
@@ -442,16 +439,11 @@
 ;  (add-hook 'window-buffer-change-functions #'my-venv-with-window-buffer-change))
 
 ; pip install python-lsp-server[all]
+; pip install flake8 pylint mypy
 (defun lsp-python-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t))
 (add-hook 'python-mode-hook #'lsp-python-install-save-hooks)
 
-;(setq lsp-pylsp-plugins-pycodestyle-max-line-length 100)
-;(setq lsp-pylsp-plugins-flake8-max-line-length 100)
-;(setq lsp-pylsp-plugins-pycodestyle-ignore '("E501")) ; long line warning
-;(setq lsp-pylsp-plugins-flake8-ignore '("E501")) ; long line warning
-;(setq flycheck-flake8-maximum-line-length 100)
-;(setq lsp-pylsp-plugins-flake8-ignore '("D100" "D101")) ; docstring
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - jinja2
@@ -462,6 +454,14 @@
 (setq web-mode-engines-alist 
   '(("django" . "\\.html\\'")
     ("php" . "\\.php\\.")) )
+(defun my-web-mode-hook ()
+  (setq indent-tabs-mode nil)
+  (setq default-tab-width 2)
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+)
+(add-hook 'web-mode-hook  'my-web-mode-hook)
 
 ;;;##############################################################
 ;;; 프로그래밍 모드 - golang
@@ -628,6 +628,7 @@ whitespaces of the next line. Otherwise it would kill current word."
 
 (require 'projectile)
 
+(setq projectile-mode-line "Projectile") ; to fix slow tramp mode
 (setq projectile-enable-caching t
       projectile-remember-window-configs t
       projectile-indexing-method 'native
@@ -669,11 +670,9 @@ whitespaces of the next line. Otherwise it would kill current word."
 
 
 ;eshell completion
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (setq pcomplete-cycle-completions nil)))
-;(setq eshell-cmpl-cycle-completions nil)
+(defun my-eshell-mode-hook ()
+   (setq pcomplete-cycle-completions nil))
+(add-hook 'eshell-mode-hook #'my-eshell-mode-hook)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

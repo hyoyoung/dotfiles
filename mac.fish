@@ -12,7 +12,7 @@ set -x GOROOT /opt/homebrew/opt/go/libexec
 set -x PATH $PATH $GOPATH/bin $GOROOT/bin
 
 # ncc
-set -x PATH $PATH /Users/hyoyoung/local/ncc
+set -x PATH $PATH /Users/hyoyoung/local/n2c
 
 # editor
 set -x EDITOR vim
