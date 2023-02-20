@@ -360,7 +360,14 @@
       (push "[/\\\\][^/\\\\]*\\.\\(mod\\|sum\\)$" lsp-file-watch-ignored)
       (setq lsp-restart 'auto-restart)
       (lsp-register-custom-settings
-        '(("gopls.completeUnimported" t t)))))
+        '(("gopls.completeUnimported" t t)))
+      (lsp-register-client
+        (make-lsp-client :new-connection (lsp-tramp-connection "~/workplace/venv/bin/pylsp")
+                         :major-modes '(python-mode)
+                         :remote? t
+                         :server-id 'remote-pylsp))
+    )
+)
 
 ;;Optional - provides fancier overlays.
 (use-package lsp-ui
@@ -672,33 +679,47 @@ whitespaces of the next line. Otherwise it would kill current word."
 ;(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 ;(setq tramp-debug-buffer t)
 ;(setq tramp-verbose 10)
+(setq tramp-auto-save-directory "~/.emacs.d/tramp-autosave")
 (defun tramp-set-auto-save ()
   (auto-save-mode -1))
-(setq tramp-auto-save-directory "~/emacs.d/tramp-autosave")
+(setq enable-remote-dir-locals t)
 
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 
 ; tramp-lsp workaround
 ; https://github.com/emacs-lsp/lsp-mode/issues/2514
-    (defun start-file-process-shell-command@around (start-file-process-shell-command name buffer &rest args)
-      "Start a program in a subprocess.  Return the process object for it.
-Similar to `start-process-shell-command', but calls `start-file-process'."
-      ;; On remote hosts, the local `shell-file-name' might be useless.
-      (let ((command (mapconcat 'identity args " ")))
-        (funcall start-file-process-shell-command name buffer command)))
+;    (defun start-file-process-shell-command@around (start-file-process-shell-command name buffer &rest args)
+;      "Start a program in a subprocess.  Return the process object for it.
+;Similar to `start-process-shell-command', but calls `start-file-process'."
+;      ;; On remote hosts, the local `shell-file-name' might be useless.
+;      (let ((command (mapconcat 'identity args " ")))
+;        (funcall start-file-process-shell-command name buffer command)))
+;
+;    (advice-add 'start-file-process-shell-command :around #'start-file-process-shell-command@around)
 
-    (advice-add 'start-file-process-shell-command :around #'start-file-process-shell-command@around)
+;; Put this in root directory of your project
+;; Install pyls in the project environment
+;; pip install python-lsp-server
+;((python-mode . ((eval . (progn (require 'lsp-mode)
+;                                (lsp-register-client
+;                                 (make-lsp-client :new-connection (lsp-tramp-connection "~/workplace/venv/bin/pylsp")
+;                                                  :major-modes '(python-mode)
+;                                                  :remote? t
+;                                                  :server-id 'remote-pyls))))
+;                 (eval . (setq lsp-clients-python-command '("~/.emacs.d/venv/bin/pylsp")))
+;                 ))
+;)
 
-(use-package tramp
-  :ensure nil
-  :config (progn
-            (setq tramp-use-ssh-controlmaster-options nil
-                  remote-file-name-inhibit-locks t
-                  tramp-verbose 1
-                  vc-ignore-dir-regexp (format "%s\\|%s"
-                                               vc-ignore-dir-regexp
-                                               tramp-file-name-regexp))))
+;(use-package tramp
+;  :ensure nil
+;  :config (progn
+;            (setq tramp-use-ssh-controlmaster-options nil
+;                  remote-file-name-inhibit-locks t
+;                  tramp-verbose 1
+;                  vc-ignore-dir-regexp (format "%s\\|%s"
+;                                               vc-ignore-dir-regexp
+;                                               tramp-file-name-regexp))))
 
 ;eshell completion
 (defun my-eshell-mode-hook ()
