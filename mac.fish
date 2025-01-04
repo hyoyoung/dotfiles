@@ -28,10 +28,14 @@ set -x LSCOLORS "ExGxBxDxCxEgEdxbxgacxd"
 set -x GREP_OPTIONS '--color=auto'
 
 # java dir path
-#set -x JAVA_HOME  (/usr/libexec/java_home)
+set -x JAVA_HOME  (/usr/libexec/java_home)
 
 # add password manager
 # source /usr/local/share/fish/vendor_completions.d/pass.fish
+
+# for alacritty
+set -e LC_CTYPE
+set -x LANG ko_KR.UTF-8
 
 alias ls='ls -Fh'
 alias vi='vim'
