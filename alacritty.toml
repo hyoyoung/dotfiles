@@ -62,8 +62,10 @@ dynamic_padding = true
 columns = 111
 lines = 30
 
-#{ key= "F", mods= "Command", action = "ReceiveChar" }
 [keyboard]
 bindings = [
-{ key= "F", mods= "Command", chars = "\u0006" }
+{ key= "F", mods= "Command", chars = "\u0006" },
+{ key= "G", mods= "Command", chars = "\u0007" },
+{ key= "V", mods= "Command", chars = "\u0016" },
+{ key= "Insert", mods= "Shift", action = "PasteSelection" },
 ]
